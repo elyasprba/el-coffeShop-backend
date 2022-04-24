@@ -12,12 +12,12 @@ const PORT = 8080;
 db.connect()
    .then(() => {
       console.log('Database Connected');
-      // pasang middleware global
+      // middleware global
       // handler untuk body form urlencoded
       server.use(express.urlencoded({ extended: false }));
-
       server.use(express.json());
 
+      // mainRouter
       server.use(mainRouter);
 
       server.listen(PORT, () => {

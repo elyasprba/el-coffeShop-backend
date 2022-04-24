@@ -1,8 +1,8 @@
 const userModels = require('../models/users');
 
-const { createUsers, getAllusers, updateUsers } = userModels;
+const { createUsers, getAllusers, updateUsers, deleteUsers } = userModels;
 
-const postNewUsers = (req, res) => {
+const postUsersControllers = (req, res) => {
    createUsers(req.body)
       .then((data) => {
          res.status(200).json({
@@ -18,7 +18,7 @@ const postNewUsers = (req, res) => {
       });
 };
 
-const getUsers = (_, res) => {
+const getUsersControllers = (_, res) => {
    getAllusers()
       .then((result) => {
          const { total, data } = result;
@@ -37,7 +37,7 @@ const getUsers = (_, res) => {
       });
 };
 
-const patchUpdateUsers = (req, res) => {
+const patchUsersControllers = (req, res) => {
    updateUsers(req.params, req.body)
       .then((data) => {
          res.status(200).json({
@@ -53,8 +53,27 @@ const patchUpdateUsers = (req, res) => {
       });
 };
 
+const deleteUsersControllers = (req, res) => {
+   const id = req.params.id;
+   deleteUsers(id)
+      .then(({ data }) => {
+         res.status(200).json({
+            data,
+            err: null,
+         });
+      })
+      .catch((error) => {
+         const { err, status } = error;
+         res.status(status).json({
+            data: [],
+            err,
+         });
+      });
+};
+
 module.exports = {
-   postNewUsers,
-   getUsers,
-   patchUpdateUsers,
+   postUsersControllers,
+   getUsersControllers,
+   patchUsersControllers,
+   deleteUsersControllers,
 };

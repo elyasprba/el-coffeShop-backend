@@ -60,8 +60,31 @@ const updateUsers = (params, body) => {
    });
 };
 
+const deleteUsers = (id) => {
+   return new Promise((resolve, reject) => {
+      const sqlQuery = 'DELETE FROM users WHERE id=$1 RETURNING *';
+      db.query(sqlQuery, [id])
+         .then((data) => {
+            if (data.rows.length === 0) {
+               return reject({ status: 404, err: 'Users Not Found' });
+            }
+            const response = {
+               data: data.rows,
+            };
+            resolve(response);
+         })
+         .catch((err) => {
+            reject({
+               status: 500,
+               err,
+            });
+         });
+   });
+};
+
 module.exports = {
    createUsers,
    getAllusers,
    updateUsers,
+   deleteUsers,
 };
