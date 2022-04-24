@@ -1,9 +1,9 @@
-const userModels = require('../models/users');
+const productsModels = require('../models/products');
 
-const { createUsers, getAllusers, updateUsers } = userModels;
+const { getAllProducts, createProducts } = productsModels;
 
-const postNewUsers = (req, res) => {
-   createUsers(req.body)
+const postNewProducts = (req, res) => {
+   createProducts(req.body)
       .then((data) => {
          res.status(200).json({
             err: null,
@@ -18,8 +18,8 @@ const postNewUsers = (req, res) => {
       });
 };
 
-const getUsers = (_, res) => {
-   getAllusers()
+const getProducts = (_, res) => {
+   getAllProducts()
       .then((result) => {
          const { total, data } = result;
          res.status(200).json({
@@ -37,24 +37,7 @@ const getUsers = (_, res) => {
       });
 };
 
-const patchUpdateUsers = (req, res) => {
-   updateUsers(req.params, req.body)
-      .then((data) => {
-         res.status(200).json({
-            err: null,
-            data,
-         });
-      })
-      .catch((err) => {
-         res.status(500).json({
-            err,
-            data: [],
-         });
-      });
-};
-
 module.exports = {
-   postNewUsers,
-   getUsers,
-   patchUpdateUsers,
+   postNewProducts,
+   getProducts,
 };

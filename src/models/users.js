@@ -39,7 +39,29 @@ const getAllusers = () => {
    });
 };
 
+const updateUsers = (params, body) => {
+   return new Promise((resolve, reject) => {
+      const { id } = params;
+      const { email, password, phone_number } = body;
+      const sqlQuery = 'UPDATE users SET email=$1, password=$2, phone_number=$3 WHERE id=$4 RETURNING *';
+      db.query(sqlQuery, [email, password, phone_number, id])
+         .then(({ rows }) => {
+            const response = {
+               data: rows[0],
+            };
+            resolve(response);
+         })
+         .catch((err) => {
+            reject({
+               status: 500,
+               err,
+            });
+         });
+   });
+};
+
 module.exports = {
    createUsers,
    getAllusers,
+   updateUsers,
 };
