@@ -39,6 +39,30 @@ const getAllProducts = () => {
    });
 };
 
+const findProducts = (query) => {
+   return new Promise((resolve, reject) => {
+      const name = query.name;
+      let sqlQuery = 'SELECT * FROM products where lower(name) like lower($1)';
+      db.query(sqlQuery, [`%${name}%`])
+         .then((result) => {
+            if (result.rows.length === 0) {
+               return reject({ status: 500, err: 'Products Not Found' });
+            }
+            const response = {
+               total: result.rowCount,
+               data: result.rows,
+            };
+            resolve(response);
+         })
+         .catch((err) => {
+            reject({
+               status: 500,
+               err,
+            });
+         });
+   });
+};
+
 const updateProducts = (params, body) => {
    return new Promise((resolve, reject) => {
       const { id } = params;
@@ -88,6 +112,7 @@ const deleteProducts = (id) => {
 module.exports = {
    createProducts,
    getAllProducts,
+   findProducts,
    updateProducts,
    deleteProducts,
 };

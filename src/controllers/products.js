@@ -1,6 +1,6 @@
 const productsModels = require('../models/products');
 
-const { getAllProducts, createProducts, updateProducts, deleteProducts } = productsModels;
+const { createProducts, getAllProducts, findProducts, updateProducts, deleteProducts } = productsModels;
 
 const postNewProducts = (req, res) => {
    createProducts(req.body)
@@ -33,6 +33,23 @@ const getProducts = (_, res) => {
          res.status(status).json({
             err,
             data: [],
+         });
+      });
+};
+
+const findProductsControllers = (req, res) => {
+   findProducts(req.query)
+      .then(({ data, total }) => {
+         res.status(200).json({
+            err: null,
+            data,
+            total,
+         });
+      })
+      .catch(({ status, err }) => {
+         res.status(status).json({
+            data: [],
+            err,
          });
       });
 };
@@ -74,6 +91,7 @@ const deleteProductsControllers = (req, res) => {
 module.exports = {
    postNewProducts,
    getProducts,
+   findProductsControllers,
    patchProductsControllers,
    deleteProductsControllers,
 };
