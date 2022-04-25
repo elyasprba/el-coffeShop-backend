@@ -1,6 +1,6 @@
 const productsModels = require('../models/products');
 
-const { getAllProducts, createProducts } = productsModels;
+const { getAllProducts, createProducts, updateProducts } = productsModels;
 
 const postNewProducts = (req, res) => {
    createProducts(req.body)
@@ -37,7 +37,24 @@ const getProducts = (_, res) => {
       });
 };
 
+const patchProductsControllers = (req, res) => {
+   updateProducts(req.params, req.body)
+      .then((data) => {
+         res.status(200).json({
+            err: null,
+            data,
+         });
+      })
+      .catch((err) => {
+         res.status(500).json({
+            err,
+            data: [],
+         });
+      });
+};
+
 module.exports = {
    postNewProducts,
    getProducts,
+   patchProductsControllers,
 };
