@@ -42,9 +42,9 @@ const getAllusers = () => {
 const updateUsers = (params, body) => {
    return new Promise((resolve, reject) => {
       const { id } = params;
-      const { password, phone_number, pict, display_name, first_name, last_name, birthday_date, address } = body;
-      const sqlQuery = 'UPDATE users SET password=$1, phone_number=$2, pict=$3, display_name=$4, first_name=$5, last_name=$6, birthday_date=$7, address=$8 WHERE id=$9 RETURNING *';
-      db.query(sqlQuery, [password, phone_number, pict, display_name, first_name, last_name, birthday_date, address, id])
+      const { password, phone_number, pict, display_name, first_name, last_name, birthday_date, address, gender } = body;
+      const sqlQuery = 'UPDATE users SET password=$1, phone_number=$2, pict=$3, display_name=$4, first_name=$5, last_name=$6, birthday_date=$7, address=$8, gender=$9 WHERE id=$10 RETURNING *';
+      db.query(sqlQuery, [password, phone_number, pict, display_name, first_name, last_name, birthday_date, address, gender, id])
          .then(({ rows }) => {
             const response = {
                data: rows[0],

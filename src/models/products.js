@@ -60,8 +60,34 @@ const updateProducts = (params, body) => {
    });
 };
 
+const deleteProducts = (id) => {
+   return new Promise((resolve, reject) => {
+      const sqlQuery = 'DELETE FROM products WHERE id=$1 RETURNING *';
+      db.query(sqlQuery, [id])
+         .then((data) => {
+            if (data.rows.length === 0) {
+               return reject({
+                  status: 404,
+                  err: 'Users Not Found',
+               });
+            }
+            const response = {
+               data: data.rows,
+            };
+            resolve(response);
+         })
+         .catch((err) => {
+            reject({
+               status: 500,
+               err,
+            });
+         });
+   });
+};
+
 module.exports = {
    createProducts,
    getAllProducts,
    updateProducts,
+   deleteProducts,
 };

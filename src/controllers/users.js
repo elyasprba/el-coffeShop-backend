@@ -54,7 +54,7 @@ const patchUsersControllers = (req, res) => {
 };
 
 const deleteUsersControllers = (req, res) => {
-   const id = req.params.id;
+   const { id } = req.params;
    deleteUsers(id)
       .then(({ data }) => {
          res.status(200).json({
