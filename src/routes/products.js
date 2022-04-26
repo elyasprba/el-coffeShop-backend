@@ -7,5 +7,6 @@ Router.get('/all', productsControllers.getProducts);
 Router.get('/', productsControllers.findProductsControllers);
 Router.patch('/:id', productsControllers.patchProductsControllers);
 Router.delete('/:id', productsControllers.deleteProductsControllers);
+Router.get('/short', productsControllers.shortItems);
 
 module.exports = Router;
