@@ -1,9 +1,9 @@
-const transactionsModels = require('../models/transactions');
+const promosModels = require('../models/promos');
 
-const { createTransactions, getAllTransactions, updateTransactions, deleteTransactions } = transactionsModels;
+const { createPromos, getAllPromos, findPromos, updatePromos, deletePromos } = promosModels;
 
-const createTransactionsControllers = (req, res) => {
-   createTransactions(req.body)
+const postPromosControllers = (req, res) => {
+   createPromos(req.body)
       .then((data) => {
          res.status(200).json({
             err: null,
@@ -18,8 +18,8 @@ const createTransactionsControllers = (req, res) => {
       });
 };
 
-const getAllTransactionsControllers = (_, res) => {
-   getAllTransactions()
+const getPromosControllers = (_, res) => {
+   getAllPromos()
       .then((result) => {
          const { total, data } = result;
          res.status(200).json({
@@ -37,8 +37,25 @@ const getAllTransactionsControllers = (_, res) => {
       });
 };
 
-const updateTransactionsControllers = (req, res) => {
-   updateTransactions(req.params, req.body)
+const findPromosControllers = (req, res) => {
+   findPromos(req.query)
+      .then(({ data, total }) => {
+         res.status(200).json({
+            err: null,
+            data,
+            total,
+         });
+      })
+      .catch(({ status, err }) => {
+         res.status(status).json({
+            data: [],
+            err,
+         });
+      });
+};
+
+const patchPromosControllers = (req, res) => {
+   updatePromos(req.params, req.body)
       .then((data) => {
          res.status(200).json({
             err: null,
@@ -53,9 +70,9 @@ const updateTransactionsControllers = (req, res) => {
       });
 };
 
-const deleteControllersControllers = (req, res) => {
+const deletePromosControllers = (req, res) => {
    const { id } = req.params;
-   deleteTransactions(id)
+   deletePromos(id)
       .then(({ data }) => {
          res.status(200).json({
             data,
@@ -72,8 +89,9 @@ const deleteControllersControllers = (req, res) => {
 };
 
 module.exports = {
-   createTransactionsControllers,
-   getAllTransactionsControllers,
-   updateTransactionsControllers,
-   deleteControllersControllers,
+   postPromosControllers,
+   getPromosControllers,
+   findPromosControllers,
+   patchPromosControllers,
+   deletePromosControllers,
 };
