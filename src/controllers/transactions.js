@@ -1,6 +1,6 @@
 const transactionsModels = require('../models/transactions');
 
-const { createTransactions, getSingleTransactions, updateTransactions, deleteTransactions } = transactionsModels;
+const { createTransactions, getSingleTransactions, updateTransactions, deleteTransactions, sortProductsFavorite } = transactionsModels;
 
 const createTransactionsControllers = (req, res) => {
    createTransactions(req.body)

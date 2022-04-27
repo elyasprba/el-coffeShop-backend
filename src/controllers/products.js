@@ -1,6 +1,6 @@
 const productsModels = require('../models/products');
 
-const { createProducts, getAllProducts, findProducts, updateProducts, deleteProducts, sortProductsBy, filterCategoryProducts } = productsModels;
+const { createProducts, getAllProducts, findProducts, updateProducts, deleteProducts, sortProductsBy, filterCategoryProducts, sortProductsFavorite } = productsModels;
 
 const postNewProducts = (req, res) => {
    createProducts(req.body)
@@ -123,6 +123,25 @@ const shortItems = (req, res) => {
       });
 };
 
+const getProductsFavoriteControllers = (_, res) => {
+   sortProductsFavorite()
+      .then((result) => {
+         const { total, data } = result;
+         res.status(200).json({
+            data,
+            total,
+            err: null,
+         });
+      })
+      .catch((error) => {
+         const { err, status } = error;
+         res.status(status).json({
+            err,
+            data: [],
+         });
+      });
+};
+
 module.exports = {
    postNewProducts,
    getProducts,
@@ -130,5 +149,6 @@ module.exports = {
    patchProductsControllers,
    deleteProductsControllers,
    shortItems,
-   filterCategoryProductsControllers
+   filterCategoryProductsControllers,
+   getProductsFavoriteControllers,
 };

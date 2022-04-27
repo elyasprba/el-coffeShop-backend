@@ -22,22 +22,22 @@ const createTransactions = (body) => {
 
 const getSingleTransactions = (id) => {
    return new Promise((resolve, reject) => {
-     const sqlQuery = 'select * from transactions where id = $1';
-     db.query(sqlQuery, [id])
-       .then((data) => {
-         if (data.rows.length === 0) {
-           return reject({ status: 404, err: ' Not Found' });
-         }
-         const response = {
-           data: data.rows,
-         };
-         resolve(response);
-       })
-       .catch((err) => {
-         reject({ status: 500, err });
-       });
+      const sqlQuery = 'select * from transactions where id = $1';
+      db.query(sqlQuery, [id])
+         .then((data) => {
+            if (data.rows.length === 0) {
+               return reject({ status: 404, err: ' Not Found' });
+            }
+            const response = {
+               data: data.rows,
+            };
+            resolve(response);
+         })
+         .catch((err) => {
+            reject({ status: 500, err });
+         });
    });
- };
+};
 
 const updateTransactions = (params, body) => {
    return new Promise((resolve, reject) => {

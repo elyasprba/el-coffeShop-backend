@@ -152,6 +152,25 @@ const sortProductsBy = (query) => {
    });
 };
 
+const sortProductsFavorite = () => {
+   return new Promise((resolve, reject) => {
+      db.query('select transactions.name_products, products.price from transactions join products on transactions.name_products = products.name group by transactions.name_products, products.price order by count(*) desc')
+         .then((result) => {
+            const response = {
+               total: result.rowCount,
+               data: result.rows,
+            };
+            resolve(response);
+         })
+         .catch((err) => {
+            reject({
+               status: 500,
+               err,
+            });
+         });
+   });
+};
+
 module.exports = {
    createProducts,
    getAllProducts,
@@ -160,4 +179,5 @@ module.exports = {
    deleteProducts,
    sortProductsBy,
    filterCategoryProducts,
+   sortProductsFavorite,
 };
