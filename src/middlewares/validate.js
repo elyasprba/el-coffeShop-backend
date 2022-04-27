@@ -1,6 +1,6 @@
 const { check, validationResult } = require('express-validator');
 
-const rules = [check('email').isEmail().bail().notEmpty().withMessage('The email is required'), check('password').exists().notEmpty().withMessage('The password is required'), check('phone_number').toInt().notEmpty().withMessage('The number phone is required')];
+const rules = [check('email').isEmail().notEmpty(), check('password').notEmpty(), check('phone_number').toInt().notEmpty()];
 
 const validateCreateUsers = [
    rules,
@@ -8,8 +8,8 @@ const validateCreateUsers = [
       const error = validationResult(req);
 
       if (!error.isEmpty()) {
-         return res.status(422).json({
-            error: error.array(),
+         return res.status(400).json({
+            msg: 'Query must contain email, password and phone_number',
          });
       }
       next();
