@@ -15,7 +15,3 @@ PostgreSQL adalah sebuah sistem manajemen database relasional yang dapat digunak
 
 API adalah singkatan dari Application Programming Interface. API sendiri merupakan interface yang dapat menghubungkan satu aplikasi dengan aplikasi lainnya.
 Contoh API : Perumpamaan yang bisa digunakan untuk menjelaskan API adalah seorang pelayan di restoran. Tugas pelayan tersebut adalah menghubungkan tamu restoran dengan juru masak.
-
-https://github.com/raevilman/the-rd-notes/blob/master/notes/rest-api/rest-api-flowchart-with-swimlanes.md
-
-https://app.diagrams.net/#G1ln16cEV5rg45lzmw61mEkrb_yjegVMVp
