@@ -8,5 +8,6 @@ Router.get('/', productsControllers.findProductsControllers);
 Router.patch('/:id', productsControllers.patchProductsControllers);
 Router.delete('/:id', productsControllers.deleteProductsControllers);
 Router.get('/short', productsControllers.shortItems);
+Router.get('/:category', productsControllers.filterCategoryProductsControllers);
 
 module.exports = Router;

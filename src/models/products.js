@@ -92,7 +92,7 @@ const deleteProducts = (id) => {
             if (data.rows.length === 0) {
                return reject({
                   status: 404,
-                  err: 'Users Not Found',
+                  err: 'Products Not Found',
                });
             }
             const response = {
@@ -109,17 +109,36 @@ const deleteProducts = (id) => {
    });
 };
 
-const shortProductsByprice = (query) => {
+const filterCategoryProducts = (category) => {
+   return new Promise((resolve, reject) => {
+      const sqlQuery = 'SELECT * FROM products where category = $1';
+      db.query(sqlQuery, [category])
+         .then((data) => {
+            if (data.rows.length === 0) {
+               return reject({ status: 404, err: 'Category Not Found' });
+            }
+            const response = {
+               data: data.rows,
+            };
+            resolve(response);
+         })
+         .catch((err) => {
+            reject({ status: 500, err });
+         });
+   });
+};
+
+const sortProductsBy = (query) => {
    return new Promise((resolve, reject) => {
       const { name, choice, shortBy } = query;
-      let sqlQuery = "select * from products where lower(name) like lower('%' || $1 || '%')";
+      let sqlQuery = 'select * from products where lower(name) like lower($1)';
       if (choice) {
          sqlQuery += ' order by ' + shortBy + ' ' + choice;
       }
-      db.query(sqlQuery, [name])
+      db.query(sqlQuery, [`%${name}%`])
          .then((result) => {
             if (result.rows.length === 0) {
-               return reject({ status: 404, err: 'Book Not Found' });
+               return reject({ status: 404, err: 'Products Not Found' });
             }
             const response = {
                total: result.rowCount,
@@ -139,5 +158,6 @@ module.exports = {
    findProducts,
    updateProducts,
    deleteProducts,
-   shortProductsByprice,
+   sortProductsBy,
+   filterCategoryProducts,
 };

@@ -1,6 +1,6 @@
 const productsModels = require('../models/products');
 
-const { createProducts, getAllProducts, findProducts, updateProducts, deleteProducts, shortProductsByprice } = productsModels;
+const { createProducts, getAllProducts, findProducts, updateProducts, deleteProducts, sortProductsBy, filterCategoryProducts } = productsModels;
 
 const postNewProducts = (req, res) => {
    createProducts(req.body)
@@ -88,14 +88,26 @@ const deleteProductsControllers = (req, res) => {
       });
 };
 
+const filterCategoryProductsControllers = (req, res) => {
+   const category = req.params.category;
+   filterCategoryProducts(category)
+      .then(({ data }) => {
+         res.status(200).json({
+            data,
+            err: null,
+         });
+      })
+      .catch((error) => {
+         const { err, status } = error;
+         res.status(status).json({
+            data: [],
+            err,
+         });
+      });
+};
+
 const shortItems = (req, res) => {
-   // localhost/book?title=harry&author=andre
-   //  req.query
-   //  {
-   //    title: harry,
-   //    author: andre
-   //  }
-   shortProductsByprice(req.query)
+   sortProductsBy(req.query)
       .then(({ data, total }) => {
          res.status(200).json({
             err: null,
@@ -118,4 +130,5 @@ module.exports = {
    patchProductsControllers,
    deleteProductsControllers,
    shortItems,
+   filterCategoryProductsControllers
 };

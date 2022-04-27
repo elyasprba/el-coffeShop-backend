@@ -1,6 +1,6 @@
 const transactionsModels = require('../models/transactions');
 
-const { createTransactions, getAllTransactions, updateTransactions, deleteTransactions } = transactionsModels;
+const { createTransactions, getSingleTransactions, updateTransactions, deleteTransactions } = transactionsModels;
 
 const createTransactionsControllers = (req, res) => {
    createTransactions(req.body)
@@ -18,21 +18,20 @@ const createTransactionsControllers = (req, res) => {
       });
 };
 
-const getAllTransactionsControllers = (_, res) => {
-   getAllTransactions()
-      .then((result) => {
-         const { total, data } = result;
+const getSingleTransactionsControllers = (req, res) => {
+   const id = req.params.id;
+   getSingleTransactions(id)
+      .then(({ data }) => {
          res.status(200).json({
             data,
-            total,
             err: null,
          });
       })
       .catch((error) => {
          const { err, status } = error;
          res.status(status).json({
-            err,
             data: [],
+            err,
          });
       });
 };
@@ -73,7 +72,7 @@ const deleteControllersControllers = (req, res) => {
 
 module.exports = {
    createTransactionsControllers,
-   getAllTransactionsControllers,
+   getSingleTransactionsControllers,
    updateTransactionsControllers,
    deleteControllersControllers,
 };
