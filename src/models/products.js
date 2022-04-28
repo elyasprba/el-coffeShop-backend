@@ -111,7 +111,7 @@ const deleteProducts = (id) => {
 
 const filterCategoryProducts = (category) => {
    return new Promise((resolve, reject) => {
-      const sqlQuery = 'SELECT * FROM products where category = $1';
+      const sqlQuery = 'SELECT name, price, category FROM products where category = $1';
       db.query(sqlQuery, [category])
          .then((data) => {
             if (data.rows.length === 0) {
@@ -131,7 +131,7 @@ const filterCategoryProducts = (category) => {
 const sortProductsBy = (query) => {
    return new Promise((resolve, reject) => {
       const { name, choice, shortBy } = query;
-      let sqlQuery = 'select * from products where lower(name) like lower($1)';
+      let sqlQuery = 'select name, price, time from products where lower(name) like lower($1)';
       if (choice) {
          sqlQuery += ' order by ' + shortBy + ' ' + choice;
       }
