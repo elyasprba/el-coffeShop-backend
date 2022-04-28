@@ -130,10 +130,10 @@ const filterCategoryProducts = (category) => {
 
 const sortProductsBy = (query) => {
    return new Promise((resolve, reject) => {
-      const { name, choice, shortBy } = query;
+      const { name, sort, sortBy } = query;
       let sqlQuery = 'select name, price, time from products where lower(name) like lower($1)';
-      if (choice) {
-         sqlQuery += ' order by ' + shortBy + ' ' + choice;
+      if (sort) {
+         sqlQuery += ' order by ' + sortBy + ' ' + sort;
       }
       db.query(sqlQuery, [`%${name}%`])
          .then((result) => {

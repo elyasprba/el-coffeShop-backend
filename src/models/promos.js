@@ -42,7 +42,7 @@ const getAllPromos = () => {
 const findPromos = (query) => {
    return new Promise((resolve, reject) => {
       const { coupon_code } = query;
-      let sqlQuery = 'SELECT * FROM promos where lower(coupon_code) like lower($1)';
+      let sqlQuery = 'SELECT name, price, description, coupon_code FROM promos where lower(coupon_code) like lower($1)';
       db.query(sqlQuery, [`%${coupon_code}%`])
          .then((result) => {
             if (result.rows.length === 0) {
