@@ -46,7 +46,7 @@ const findProducts = (query) => {
       db.query(sqlQuery, [`%${name}%`])
          .then((result) => {
             if (result.rows.length === 0) {
-               return reject({ status: 500, err: 'Products Not Found' });
+               return reject({ status: 500, msg: 'Products Not Found' });
             }
             const response = {
                total: result.rowCount,

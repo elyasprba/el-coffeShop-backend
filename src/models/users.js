@@ -3,7 +3,7 @@ const db = require('../config/db');
 const createUsers = (body) => {
    return new Promise((resolve, reject) => {
       const { email, password, phone_number } = body;
-      const sqlQuery = 'INSERT INTO users(email, password, phone_number) VALUES ($1, $2, $3) RETURNING *';
+      const sqlQuery = 'INSERT INTO users(email, password, phone_number) VALUES ($1, $2, $3) RETURNING id, email, phone_number, pict, display_name, first_name, last_name, birthday_date, address, gender';
       db.query(sqlQuery, [email, password, phone_number])
          .then(({ rows }) => {
             const response = {
@@ -39,12 +39,33 @@ const getAllusers = () => {
    });
 };
 
+const findUsers = (id) => {
+   return new Promise((resolve, reject) => {
+      // parameterized query
+      const sqlQuery = 'select * from users where id = $1';
+      db.query(sqlQuery, [id])
+         .then((data) => {
+            if (data.rows.length === 0) {
+               return reject({ status: 404, err: 'Users Not Found' });
+            }
+            const response = {
+               data: data.rows,
+            };
+            resolve(response);
+         })
+         .catch((err) => {
+            reject({ status: 500, err });
+         });
+   });
+};
+
 const updateUsers = (params, body) => {
    return new Promise((resolve, reject) => {
       const { id } = params;
-      const { password, phone_number, pict, display_name, first_name, last_name, birthday_date, address, gender } = body;
-      const sqlQuery = 'UPDATE users SET password=$1, phone_number=$2, pict=$3, display_name=$4, first_name=$5, last_name=$6, birthday_date=$7, address=$8, gender=$9 WHERE id=$10 RETURNING *';
-      db.query(sqlQuery, [password, phone_number, pict, display_name, first_name, last_name, birthday_date, address, gender, id])
+      const { email, password, phone_number, pict, display_name, first_name, last_name, address, gender } = body;
+      const sqlQuery =
+         "UPDATE users SET email = coalesce(nullif($1, ''), email ), password = coalesce(nullif($2, ''), password ), phone_number = coalesce(nullif($3, ''), phone_number ), pict = coalesce(nullif($4, ''), pict ), display_name = coalesce(nullif($5, ''), display_name ), first_name = coalesce(nullif($6, ''), first_name ), last_name = coalesce(nullif($7, ''), last_name ), address  = coalesce(nullif($8, ''), address  ), gender = coalesce(nullif($9, ''), gender ) WHERE id=$10 returning email, phone_number, pict, display_name, first_name, last_name, address, gender, id";
+      db.query(sqlQuery, [email, password, phone_number, pict, display_name, first_name, last_name, address, gender, id])
          .then(({ rows }) => {
             const response = {
                data: rows[0],
@@ -85,6 +106,7 @@ const deleteUsers = (id) => {
 module.exports = {
    createUsers,
    getAllusers,
+   findUsers,
    updateUsers,
    deleteUsers,
 };

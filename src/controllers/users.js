@@ -1,12 +1,12 @@
 const userModels = require('../models/users');
 
-const { createUsers, getAllusers, updateUsers, deleteUsers } = userModels;
+const { createUsers, getAllusers, findUsers, updateUsers, deleteUsers } = userModels;
 
 const postUsersControllers = (req, res) => {
    createUsers(req.body)
       .then((data) => {
          res.status(200).json({
-            err: null,
+            msg: 'Created users success',
             data,
          });
       })
@@ -41,7 +41,7 @@ const patchUsersControllers = (req, res) => {
    updateUsers(req.params, req.body)
       .then((data) => {
          res.status(200).json({
-            err: null,
+            msg: 'Update successfull',
             data,
          });
       })
@@ -49,6 +49,25 @@ const patchUsersControllers = (req, res) => {
          res.status(500).json({
             err,
             data: [],
+         });
+      });
+};
+
+const findUsersControllers = (req, res) => {
+   const id = req.params.id;
+   findUsers(id)
+      .then(({ data }) => {
+         // const { data } = result;
+         res.status(200).json({
+            data,
+            err: null,
+         });
+      })
+      .catch((error) => {
+         const { err, status } = error;
+         res.status(status).json({
+            data: [],
+            err,
          });
       });
 };
@@ -74,6 +93,7 @@ const deleteUsersControllers = (req, res) => {
 module.exports = {
    postUsersControllers,
    getUsersControllers,
+   findUsersControllers,
    patchUsersControllers,
    deleteUsersControllers,
 };
