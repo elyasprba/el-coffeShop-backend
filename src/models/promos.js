@@ -66,9 +66,9 @@ const findPromos = (query) => {
 const updatePromos = (params, body) => {
    return new Promise((resolve, reject) => {
       const { id } = params;
-      const { name, price, description, size, coupon_code, discount, pict } = body;
-      const sqlQuery = 'UPDATE promos SET name=$1, price=$2, description=$3, size=$4, coupon_code=$5, discount=$6, pict=$7 WHERE id=$8 RETURNING *';
-      db.query(sqlQuery, [name, price, description, size, coupon_code, discount, pict, id])
+      const { name, price, description, pict, size, coupon_code, discount } = body;
+      const sqlQuery = "UPDATE promos SET name = coalesce(nullif($1, ''), name ), price = coalesce(nullif($2, '')::int4, price ), description = coalesce(nullif($3, ''), description ), pict = coalesce(nullif($4, ''), pict ), size = coalesce(nullif($5, ''), size ), coupon_code = coalesce(nullif($6, ''), coupon_code ), discount = coalesce(nullif($7, '')::int4, discount ) WHERE id = $8 returning *;";
+      db.query(sqlQuery, [name, price, description, pict, size, coupon_code, discount, id])
          .then(({ rows }) => {
             const response = {
                data: rows[0],

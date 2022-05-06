@@ -42,9 +42,9 @@ const getSingleTransactions = (id) => {
 const updateTransactions = (params, body) => {
    return new Promise((resolve, reject) => {
       const { id } = params;
-      const { name_products, qty, size, subtotal, tax, shipping, total, address_details } = body;
-      const sqlQuery = 'UPDATE transactions SET name_products=$1, qty=$2, size=$3, subtotal=$4, tax=$5, shipping=$6, total=$7, address_details=$8 WHERE id=$9 RETURNING *';
-      db.query(sqlQuery, [name_products, qty, size, subtotal, tax, shipping, total, address_details, id])
+      const { name_products, qty, size, subtotal, tax, shipping, total } = body;
+      const sqlQuery = "UPDATE transactions SET name_products = coalesce(nullif($1, ''), name_products ), qty = coalesce(nullif($2, '')::int4, qty ), size = coalesce(nullif($3, ''), size ), subtotal = coalesce(nullif($4, '')::int4, subtotal ), tax = coalesce(nullif($5, '')::int4, tax ), shipping = coalesce(nullif($6, '')::int4, shipping ), total = coalesce(nullif($7, '')::int4, total ) WHERE id = $8 returning *";
+      db.query(sqlQuery, [name_products, qty, size, subtotal, tax, shipping, total, id])
          .then(({ rows }) => {
             const response = {
                data: rows[0],

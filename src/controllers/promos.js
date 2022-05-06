@@ -59,6 +59,7 @@ const patchPromosControllers = (req, res) => {
       .then((data) => {
          res.status(200).json({
             err: null,
+            msg: 'Update Success',
             data,
          });
       })
