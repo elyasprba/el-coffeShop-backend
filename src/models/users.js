@@ -22,7 +22,7 @@ const createUsers = (body) => {
 
 const getAllusers = () => {
    return new Promise((resolve, reject) => {
-      db.query('SELECT * FROM users')
+      db.query('SELECT id, email, phone_number, pict, display_name, birthday_date, address, gender FROM users')
          .then((result) => {
             const response = {
                total: result.rowCount,
@@ -41,7 +41,6 @@ const getAllusers = () => {
 
 const findUsers = (id) => {
    return new Promise((resolve, reject) => {
-      // parameterized query
       const sqlQuery = 'select * from users where id = $1';
       db.query(sqlQuery, [id])
          .then((data) => {

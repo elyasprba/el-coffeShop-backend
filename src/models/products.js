@@ -66,9 +66,9 @@ const findProducts = (query) => {
 const updateProducts = (params, body) => {
    return new Promise((resolve, reject) => {
       const { id } = params;
-      const { name, description, price, size, pict, stock, delivery_info, category, time } = body;
-      const sqlQuery = 'UPDATE products SET name=$1, description=$2, price=$3, size=$4, pict=$5, stock=$6, delivery_info=$7, category=$8, time=$9 WHERE id=$10 RETURNING *';
-      db.query(sqlQuery, [name, description, price, size, pict, stock, delivery_info, category, time, id])
+      const { name, description, size, pict, stock, delivery_info, category, price } = body;
+      const sqlQuery = "UPDATE products SET name = coalesce(nullif($1, ''), name ), description = coalesce(nullif($2, ''), description ), size = coalesce(nullif($3, ''), size ), pict = coalesce(nullif($4, ''), pict ), stock = coalesce(nullif($5, '')::int8, stock ), delivery_info = coalesce(nullif($6, ''), delivery_info ), category  = coalesce(nullif($7, ''), category  ), price = coalesce(nullif($8, '')::int8, price) WHERE id=$9 returning *";
+      db.query(sqlQuery, [name, description, size, pict, stock, delivery_info, category, price, id])
          .then(({ rows }) => {
             const response = {
                data: rows[0],
@@ -78,6 +78,7 @@ const updateProducts = (params, body) => {
          .catch((err) => {
             reject({
                status: 500,
+               msg: 'salah input',
                err,
             });
          });
