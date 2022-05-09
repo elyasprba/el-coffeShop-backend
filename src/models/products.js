@@ -66,9 +66,9 @@ const findProducts = (query) => {
 const updateProducts = (params, body) => {
    return new Promise((resolve, reject) => {
       const { id } = params;
-      const { name, description, size, pict, stock, delivery_info, category, price } = body;
-      const sqlQuery = "UPDATE products SET name = coalesce(nullif($1, ''), name ), description = coalesce(nullif($2, ''), description ), size = coalesce(nullif($3, ''), size ), pict = coalesce(nullif($4, ''), pict ), stock = coalesce(nullif($5, '')::int8, stock ), delivery_info = coalesce(nullif($6, ''), delivery_info ), category  = coalesce(nullif($7, ''), category  ), price = coalesce(nullif($8, '')::int8, price) WHERE id=$9 returning *";
-      db.query(sqlQuery, [name, description, size, pict, stock, delivery_info, category, price, id])
+      const { name, description, size, pict, stock, delivery_info, category, price, time } = body;
+      const sqlQuery = "UPDATE products SET name = coalesce(nullif($1, ''), name ), description = coalesce(nullif($2, ''), description ), size = coalesce(nullif($3, ''), size ), pict = coalesce(nullif($4, ''), pict ), stock = coalesce(nullif($5, '')::int8, stock ), delivery_info = coalesce(nullif($6, ''), delivery_info ), category  = coalesce(nullif($7, ''), category  ), price = coalesce(nullif($8, '')::int8, price), time = coalesce(nullif($9, '')::timestamp, time) WHERE id=$10 returning *";
+      db.query(sqlQuery, [name, description, size, pict, stock, delivery_info, category, price, time, id])
          .then(({ rows }) => {
             const response = {
                data: rows[0],
