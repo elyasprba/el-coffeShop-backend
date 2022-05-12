@@ -39,7 +39,7 @@ const login = async (req, res) => {
       };
       const jwtOption = {
          issuer: process.env.JWT_ISSUER,
-         expiresIn: '10s',
+         expiresIn: '10000000s',
       };
       const token = jwt.sign(payload, process.env.JWT_SECRET, jwtOption);
       successResponse(res, 200, { email, token }, null);

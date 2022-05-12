@@ -1,10 +1,13 @@
 const db = require('../config/db');
+const { v4: uuidv4 } = require('uuid');
 
 const createProducts = (body) => {
    return new Promise((resolve, reject) => {
       const { name, description, price, size, pict, stock } = body;
-      const sqlQuery = 'INSERT INTO products(name, description, price, size, pict, stock) VALUES($1, $2, $3, $4, $5, $6) RETURNING *';
-      db.query(sqlQuery, [name, description, price, size, pict, stock])
+      const id = uuidv4();
+      const timestemp = new Date(Date.now());
+      const sqlQuery = 'INSERT INTO products(id, name, description, price, size, pict, stock, created_at) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *';
+      db.query(sqlQuery, [id, name, description, price, size, pict, stock, timestemp])
          .then(({ rows }) => {
             const response = {
                data: rows[0],

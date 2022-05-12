@@ -1,10 +1,9 @@
 require('dotenv').config();
 
 const express = require('express');
-
 const mainRouter = require('./src/routes/index');
-
 const db = require('./src/config/db');
+const cors = require('cors');
 
 const server = express();
 const PORT = 8080;
@@ -16,6 +15,13 @@ db.connect()
       // handler untuk body form urlencoded
       server.use(express.urlencoded({ extended: false }));
       server.use(express.json());
+      // cors
+      const corsOptions = {
+         origin: '*',
+         methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+         allowedHeaders: ['Content-Type', 'Authorization'],
+      };
+      server.use(cors(corsOptions));
 
       // mainRouter
       server.use(mainRouter);
