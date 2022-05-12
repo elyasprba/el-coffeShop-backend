@@ -19,6 +19,20 @@ const register = (hashPassword, email, phone_number) => {
    });
 };
 
+const getEmailUsers = (email) => {
+   return new Promise((resolve, reject) => {
+      const sqlQuery = 'SELECT email FROM users WHERE email = $1';
+      db.query(sqlQuery, [email])
+         .then((result) => {
+            resolve(result);
+         })
+         .catch((err) => {
+            reject(err);
+         });
+   });
+};
+
 module.exports = {
    register,
+   getEmailUsers,
 };
