@@ -6,6 +6,6 @@ const { validateCreateUsers } = require('../middlewares/validate');
 
 Router.post('/new', validateCreateUsers, checkDuplicate, authControllers.registerControllers);
 
-Router.post('/', () => {});
+Router.post('/', authControllers.login);
 
 module.exports = Router;
