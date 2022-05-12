@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const { errorResponse } = require('../helpers/response');
 const { getEmailUsers } = require('../models/auth');
 
@@ -15,4 +16,22 @@ const checkDuplicate = (req, res, next) => {
       });
 };
 
-module.exports = { checkDuplicate };
+const checkToken = (req, res, next) => {
+   const bearertoken = req.header('x-access-token');
+   if (!bearertoken) {
+      return errorResponse(res, 401, { msg: 'Sign in needed' });
+   }
+   const token = bearertoken.split(' ')[1];
+   jwt.verify(token, process.env.JWT_SECRET, { issuer: process.env.JWT_ISSUER }, (err, payload) => {
+      if (err && err.name === 'TokenExpiredError') {
+         return errorResponse(res, 401, { msg: 'You need to sign in again' });
+      }
+      req.userPayload = payload;
+      next();
+   });
+};
+
+module.exports = {
+   checkDuplicate,
+   checkToken,
+};

@@ -1,8 +1,9 @@
 const Router = require('express').Router();
 
 const productsControllers = require('../controllers/products');
+const { checkToken } = require('../middlewares/auth');
 
-Router.post('/', productsControllers.postNewProducts);
+Router.post('/', checkToken, productsControllers.postNewProducts);
 Router.get('/all', productsControllers.getProducts);
 Router.get('/fav', productsControllers.getProductsFavoriteControllers);
 Router.get('/', productsControllers.findProductsControllers);
