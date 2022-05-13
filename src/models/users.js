@@ -58,16 +58,38 @@ const findUsers = (id) => {
    });
 };
 
-const updateUsers = (params, body) => {
+// const updateUsers = (params, body) => {
+//    return new Promise((resolve, reject) => {
+//       const { id } = params;
+//       const { email, password, phone_number, pict, display_name, first_name, last_name, address, gender, birthday_date } = body;
+//       const sqlQuery =
+//          "UPDATE users SET email = coalesce(nullif($1, ''), email ), password = coalesce(nullif($2, ''), password ), phone_number = coalesce(nullif($3, ''), phone_number ), pict = coalesce(nullif($4, ''), pict ), display_name = coalesce(nullif($5, ''), display_name ), first_name = coalesce(nullif($6, ''), first_name ), last_name = coalesce(nullif($7, ''), last_name ), address  = coalesce(nullif($8, ''), address  ), gender = coalesce(nullif($9, ''), gender ), birthday_date = coalesce(nullif($10, '')::date, birthday_date) WHERE id=$11 returning email, phone_number, pict, display_name, first_name, last_name, address, gender, birthday_date";
+//       db.query(sqlQuery, [email, password, phone_number, pict, display_name, first_name, last_name, address, gender, birthday_date, id])
+//          .then(({ rows }) => {
+//             const response = {
+//                data: rows[0],
+//             };
+//             resolve(response);
+//          })
+//          .catch((err) => {
+//             reject({
+//                status: 500,
+//                err,
+//             });
+//          });
+//    });
+// };
+
+const updateUsersNew = (id, file, body) => {
    return new Promise((resolve, reject) => {
-      const { id } = params;
-      const { email, password, phone_number, pict, display_name, first_name, last_name, address, gender, birthday_date } = body;
-      const sqlQuery =
-         "UPDATE users SET email = coalesce(nullif($1, ''), email ), password = coalesce(nullif($2, ''), password ), phone_number = coalesce(nullif($3, ''), phone_number ), pict = coalesce(nullif($4, ''), pict ), display_name = coalesce(nullif($5, ''), display_name ), first_name = coalesce(nullif($6, ''), first_name ), last_name = coalesce(nullif($7, ''), last_name ), address  = coalesce(nullif($8, ''), address  ), gender = coalesce(nullif($9, ''), gender ), birthday_date = coalesce(nullif($10, '')::date, birthday_date) WHERE id=$11 returning email, phone_number, pict, display_name, first_name, last_name, address, gender, birthday_date";
-      db.query(sqlQuery, [email, password, phone_number, pict, display_name, first_name, last_name, address, gender, birthday_date, id])
-         .then(({ rows }) => {
+      const { email, password, phone_number } = body;
+      const updated_at = new Date(Date.now());
+      const pict = file.path.replace('public', '').replace(/\\/g, '/');
+      const sqlQuery = 'UPDATE users SET email = coalesce($1, email), password = coalesce($2, password), phone_number = coalesce($3, phone_number), pict = coalesce($4, pict), updated_at = $5 WHERE id = $6 returning *';
+      db.query(sqlQuery, [email, password, phone_number, pict, updated_at, id])
+         .then((result) => {
             const response = {
-               data: rows[0],
+               data: result.rows[0],
             };
             resolve(response);
          })
@@ -106,6 +128,7 @@ module.exports = {
    createUsers,
    getAllusers,
    findUsers,
-   updateUsers,
+   // updateUsers,
+   updateUsersNew,
    deleteUsers,
 };

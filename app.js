@@ -23,6 +23,8 @@ db.connect()
       };
       server.use(cors(corsOptions));
 
+      server.use(express.static('public'));
+
       // mainRouter
       server.use(mainRouter);
 

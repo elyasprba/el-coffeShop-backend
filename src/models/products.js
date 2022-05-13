@@ -23,15 +23,27 @@ const createProducts = (body) => {
    });
 };
 
-const getAllProducts = () => {
+const getAllProducts = (query) => {
    return new Promise((resolve, reject) => {
-      db.query('SELECT * FROM products')
+      const { page = 1, limit = 3 } = query;
+      const offset = (parseInt(page) - 1) * Number(limit);
+      db.query('SELECT * FROM products ORDER BY id LIMIT $1 OFFSET $2', [Number(limit), offset])
          .then((result) => {
             const response = {
-               total: result.rowCount,
                data: result.rows,
             };
-            resolve(response);
+            db.query('SELECT COUNT(*) AS count_products FROM products')
+               .then((result) => {
+                  response.totalData = parseInt(result.rows[0]['count_products']);
+                  response.totalPage = Math.ceil(response.totalData / parseInt(limit));
+                  resolve(response);
+               })
+               .catch((err) => {
+                  reject({
+                     status: 500,
+                     err,
+                  });
+               });
          })
          .catch((err) => {
             reject({

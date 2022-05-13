@@ -17,7 +17,7 @@ const checkDuplicate = (req, res, next) => {
 };
 
 const checkToken = (req, res, next) => {
-   const bearertoken = req.header('x-access-token');
+   const bearertoken = req.header('Authorization');
    if (!bearertoken) {
       return errorResponse(res, 401, { msg: 'Sign in needed' });
    }

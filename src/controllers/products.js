@@ -18,13 +18,17 @@ const postNewProducts = (req, res) => {
       });
 };
 
-const getProducts = (_, res) => {
-   getAllProducts()
+const getProducts = (req, res) => {
+   getAllProducts(req.query)
       .then((result) => {
-         const { total, data } = result;
+         const { totalData, totalPage, data } = result;
+         const meta = {
+            totalData,
+            totalPage,
+         };
          res.status(200).json({
             data,
-            total,
+            meta,
             err: null,
          });
       })
