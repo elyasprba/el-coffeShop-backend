@@ -55,24 +55,6 @@ const patchUsersControllers = (req, res) => {
       });
 };
 
-// const patchUsersControllersNew = (req, res) => {
-//    const id = req.userPayload.id;
-//    const { file = null } = req;
-//    updateUsersNew(id, file, req.body)
-//       .then((data) => {
-//          res.status(200).json({
-//             msg: 'Update successfull',
-//             data,
-//          });
-//       })
-//       .catch((err) => {
-//          res.status(500).json({
-//             err,
-//             data: [],
-//          });
-//       });
-// };
-
 const findUsersControllers = (req, res) => {
    const id = req.params.id;
    findUsers(id)

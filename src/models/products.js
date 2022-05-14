@@ -1,24 +1,22 @@
 const db = require('../config/db');
 const { v4: uuidv4 } = require('uuid');
 
-const createProducts = (body) => {
+const createProducts = (body, file) => {
    return new Promise((resolve, reject) => {
-      const { name, description, price, size, pict, stock } = body;
+      const { name, description, size, delivery_info, category, price } = body;
       const id = uuidv4();
-      const timestemp = new Date(Date.now());
-      const sqlQuery = 'INSERT INTO products(id, name, description, price, size, pict, stock, created_at) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *';
-      db.query(sqlQuery, [id, name, description, price, size, pict, stock, timestemp])
-         .then(({ rows }) => {
+      const created_at = new Date(Date.now());
+      const pict = file.path.replace('public', '').replace(/\\/g, '/');
+      const sqlQuery = 'INSERT INTO products(id, name, description, size, delivery_info, category, price, pict, created_at) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *';
+      db.query(sqlQuery, [id, name, description, size, delivery_info, category, price, pict, created_at])
+         .then((result) => {
             const response = {
-               data: rows[0],
+               data: result.rows[0],
             };
             resolve(response);
          })
          .catch((err) => {
-            reject({
-               status: 500,
-               err,
-            });
+            reject({ status: 500, err });
          });
    });
 };
@@ -78,29 +76,50 @@ const findProducts = (query) => {
    });
 };
 
-const updateProducts = (params, body) => {
+// const updateProducts = (params, body) => {
+//    return new Promise((resolve, reject) => {
+//       const { id } = params;
+//       const { name, description, size, pict, stock, delivery_info, category, price, time } = body;
+//       const sqlQuery = "UPDATE products SET name = coalesce(nullif($1, ''), name ), description = coalesce(nullif($2, ''), description ), size = coalesce(nullif($3, ''), size ), pict = coalesce(nullif($4, ''), pict ), stock = coalesce(nullif($5, '')::int8, stock ), delivery_info = coalesce(nullif($6, ''), delivery_info ), category  = coalesce(nullif($7, ''), category  ), price = coalesce(nullif($8, '')::int8, price), time = coalesce(nullif($9, '')::timestamp, time) WHERE id=$10 returning *";
+//       db.query(sqlQuery, [name, description, size, pict, stock, delivery_info, category, price, time, id])
+//          .then(({ rows }) => {
+//             const response = {
+//                data: rows[0],
+//             };
+//             resolve(response);
+//          })
+//          .catch((err) => {
+//             reject({
+//                status: 500,
+//                msg: 'salah input',
+//                err,
+//             });
+//          });
+//    });
+// };
+
+const updateProductsNew = (id, file, body) => {
    return new Promise((resolve, reject) => {
-      const { id } = params;
-      const { name, description, size, pict, stock, delivery_info, category, price, time } = body;
-      const sqlQuery = "UPDATE products SET name = coalesce(nullif($1, ''), name ), description = coalesce(nullif($2, ''), description ), size = coalesce(nullif($3, ''), size ), pict = coalesce(nullif($4, ''), pict ), stock = coalesce(nullif($5, '')::int8, stock ), delivery_info = coalesce(nullif($6, ''), delivery_info ), category  = coalesce(nullif($7, ''), category  ), price = coalesce(nullif($8, '')::int8, price), time = coalesce(nullif($9, '')::timestamp, time) WHERE id=$10 returning *";
-      db.query(sqlQuery, [name, description, size, pict, stock, delivery_info, category, price, time, id])
-         .then(({ rows }) => {
+      // stock, delivery_info, category, price, time
+      const { name, description } = body;
+      const updated_at = new Date(Date.now());
+      const pict = file.path.replace('public', '').replace(/\\/g, '/');
+      const sqlQuery = 'UPDATE products SET name = coalesce($1, name), description = coalesce($2, description), size = coalesce($3, size), pict = coalesce($4, pict), updated_at = $5 WHERE id = $6 returning *';
+      db.query(sqlQuery, [name, description, size, pict, updated_at, id])
+         .then((result) => {
             const response = {
-               data: rows[0],
+               data: result.rows[0],
             };
             resolve(response);
          })
          .catch((err) => {
             reject({
                status: 500,
-               msg: 'salah input',
                err,
             });
          });
    });
 };
-
-const updateProductsNew = () => {};
 
 const deleteProducts = (id) => {
    return new Promise((resolve, reject) => {
@@ -193,7 +212,7 @@ module.exports = {
    createProducts,
    getAllProducts,
    findProducts,
-   updateProducts,
+   updateProductsNew,
    deleteProducts,
    sortProductsBy,
    filterCategoryProducts,

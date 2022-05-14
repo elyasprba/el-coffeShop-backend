@@ -3,17 +3,20 @@ const productsModels = require('../models/products');
 const { createProducts, getAllProducts, findProducts, updateProducts, deleteProducts, sortProductsBy, filterCategoryProducts, sortProductsFavorite } = productsModels;
 
 const postNewProducts = (req, res) => {
-   createProducts(req.body)
-      .then((data) => {
+   const { file = null } = req;
+   createProducts(req.body, file)
+      .then((result) => {
+         const { data } = result;
          res.status(200).json({
             err: null,
             data,
          });
       })
-      .catch((err) => {
-         res.status(500).json({
-            err,
+      .catch((error) => {
+         const { status, err } = error;
+         res.status(status).json({
             data: [],
+            err,
          });
       });
 };
