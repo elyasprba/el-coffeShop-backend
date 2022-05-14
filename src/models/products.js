@@ -100,6 +100,8 @@ const updateProducts = (params, body) => {
    });
 };
 
+const updateProductsNew = () => {};
+
 const deleteProducts = (id) => {
    return new Promise((resolve, reject) => {
       const sqlQuery = 'DELETE FROM products WHERE id=$1 RETURNING *';

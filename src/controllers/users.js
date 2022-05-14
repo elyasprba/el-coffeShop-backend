@@ -1,5 +1,5 @@
 const userModels = require('../models/users');
-const { createUsers, getAllusers, findUsers, deleteUsers, updateUsersNew } = userModels;
+const { createUsers, getAllusers, findUsers, deleteUsers, updateUsers } = userModels;
 
 const postUsersControllers = (req, res) => {
    createUsers(req.body)
@@ -39,7 +39,7 @@ const getUsersControllers = (_, res) => {
 const patchUsersControllers = (req, res) => {
    const id = req.userPayload.id;
    const { file = null } = req;
-   updateUsersNew(id, file, req.body)
+   updateUsers(id, file, req.body)
       .then((result) => {
          const { data } = result;
          res.status(200).json({
