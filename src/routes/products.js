@@ -8,10 +8,9 @@ Router.post('/', checkToken, upload.single('pict'), productsControllers.postNewP
 Router.get('/all', productsControllers.getProducts);
 Router.get('/fav', productsControllers.getProductsFavoriteControllers);
 Router.get('/', productsControllers.findProductsControllers);
-// Router.patch('/:id', productsControllers.patchProductsControllers);
 Router.delete('/:id', productsControllers.deleteProductsControllers);
 Router.get('/sort', productsControllers.shortItems);
 Router.get('/:category', productsControllers.filterCategoryProductsControllers);
-// Router.patch('/', checkToken, upload.single('pict'), productsControllers.patchProductsControllers);
+Router.patch('/:id', checkToken, upload.single('pict'), productsControllers.patchProductsControllers);
 
 module.exports = Router;

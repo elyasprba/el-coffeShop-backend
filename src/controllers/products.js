@@ -8,8 +8,9 @@ const postNewProducts = (req, res) => {
       .then((result) => {
          const { data } = result;
          res.status(200).json({
-            err: null,
+            msg: 'Created Products Succsess',
             data,
+            err: null,
          });
       })
       .catch((error) => {
@@ -62,11 +63,12 @@ const findProductsControllers = (req, res) => {
 };
 
 const patchProductsControllers = (req, res) => {
-   updateProducts(req.params, req.body)
-      .then((data) => {
+   const { id } = req.params;
+   const { file = null } = req;
+   updateProducts(id, file, req.body)
+      .then((result) => {
+         const { data } = result;
          res.status(200).json({
-            err: null,
-            msg: 'Update Succsess',
             data,
          });
       })
