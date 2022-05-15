@@ -23,7 +23,7 @@ const createProducts = (body, file) => {
 
 const getAllProducts = (query) => {
    return new Promise((resolve, reject) => {
-      const { page = 1, limit = 3 } = query;
+      const { page, limit } = query;
       const offset = (parseInt(page) - 1) * Number(limit);
       db.query('SELECT * FROM products ORDER BY id LIMIT $1 OFFSET $2', [Number(limit), offset])
          .then((result) => {
@@ -85,7 +85,7 @@ const updateProducts = (id, file, body) => {
       if (file !== null) {
          pict = file.path.replace('public', '').replace(/\\/g, '/');
       }
-      const sqlQuery = "UPDATE products SET name = coalesce(nullif($1, ''), name), description = coalesce($2, description), size = coalesce($3, size), stock = coalesce($4, stock), delivery_info = coalesce($5, delivery_info), category = coalesce($6, category), price = coalesce($7, price), pict = coalesce($8, pict), updated_at = $9 WHERE id = $10 returning *";
+      const sqlQuery = "UPDATE products SET name = coalesce(nullif($1, ''), name), description = coalesce(nullif($2, ''), description), size = coalesce(nullif($3, ''), size), stock = coalesce(nullif($4, '')::int8, stock), delivery_info = coalesce(nullif($5, ''), delivery_info), category = coalesce(nullif($6, ''), category), price = coalesce(nullif($7, '')::int8, price), pict = coalesce($8, pict), updated_at = $9 WHERE id = $10 returning *";
       db.query(sqlQuery, [name, description, size, stock, delivery_info, category, price, pict, updated_at, id])
          .then((result) => {
             const response = {

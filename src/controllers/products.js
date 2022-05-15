@@ -1,6 +1,7 @@
 const productsModels = require('../models/products');
-
 const { createProducts, getAllProducts, findProducts, updateProducts, deleteProducts, sortProductsBy, filterCategoryProducts, sortProductsFavorite } = productsModels;
+
+const { successResponse, errorResponse } = require('../helpers/response');
 
 const postNewProducts = (req, res) => {
    const { file = null } = req;
@@ -26,9 +27,50 @@ const getProducts = (req, res) => {
    getAllProducts(req.query)
       .then((result) => {
          const { totalData, totalPage, data } = result;
+         const { limit = 1, page = 3 } = req.query;
+         const nextPage = Number(page) + 1;
+         const prevPage = Number(page) - 1;
+
+         let next = `/products${req.path}?`;
+         let prev = `/products${req.path}?`;
+         if (limit) {
+            next += `limit=${limit}&`;
+            prev += `limit=${limit}&`;
+         }
+         if (page) {
+            next += `page=${nextPage}`;
+            prev += `page=${prevPage}`;
+         }
+         if (Number(page) == 1 && totalPage !== 1) {
+            const meta = {
+               totalData,
+               totalPage,
+               page: Number(page),
+               next,
+            };
+            return successResponse(res, 200, data, meta);
+         }
+         if (Number(page) == totalPage && totalPage !== 1) {
+            const meta = {
+               totalData,
+               totalPage,
+               page: Number(page),
+               prev,
+            };
+            return successResponse(res, 200, data, meta);
+         }
+         if (totalPage == 1) {
+            const meta = {
+               totalData,
+               totalPage,
+            };
+            return successResponse(res, 200, data, meta);
+         }
          const meta = {
             totalData,
             totalPage,
+            next,
+            prev,
          };
          res.status(200).json({
             data,

@@ -4,7 +4,7 @@ const authControllers = require('../controllers/auth');
 const { checkDuplicate } = require('../middlewares/auth');
 const { validateCreateUsers } = require('../middlewares/validate');
 
-Router.post('/new', validateCreateUsers, checkDuplicate, authControllers.registerControllers);
+Router.post('/register', validateCreateUsers, checkDuplicate, authControllers.registerControllers);
 
 Router.post('/', authControllers.login);
 
