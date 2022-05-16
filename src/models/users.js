@@ -20,15 +20,27 @@ const createUsers = (body) => {
    });
 };
 
-const getAllusers = () => {
+const getAllusers = (query) => {
    return new Promise((resolve, reject) => {
-      db.query('SELECT id, email, phone_number, pict, display_name, birthday_date, address, gender FROM users')
+      const { page, limit } = query;
+      const offset = (Number(page) - 1) * Number(limit);
+      db.query('SELECT * FROM users ORDER BY id LIMIT $1 OFFSET $2', [Number(limit), offset])
          .then((result) => {
             const response = {
-               total: result.rowCount,
                data: result.rows,
             };
-            resolve(response);
+            db.query('SELECT COUNT(*) AS count_users FROM users')
+               .then((result) => {
+                  response.totalData = Number(result.rows[0]['count_users']);
+                  response.totalPage = Math.ceil(response.totalData / Number(limit));
+                  resolve(response);
+               })
+               .catch((err) => {
+                  reject({
+                     status: 500,
+                     err,
+                  });
+               });
          })
          .catch((err) =>
             reject({

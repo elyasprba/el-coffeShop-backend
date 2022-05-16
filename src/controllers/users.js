@@ -1,5 +1,6 @@
 const userModels = require('../models/users');
 const { createUsers, getAllusers, findUsers, deleteUsers, updateUsers } = userModels;
+const { successResponse, errorResponse } = require('../helpers/response');
 
 const postUsersControllers = (req, res) => {
    createUsers(req.body)
@@ -17,13 +18,58 @@ const postUsersControllers = (req, res) => {
       });
 };
 
-const getUsersControllers = (_, res) => {
-   getAllusers()
+const getUsersControllers = (req, res) => {
+   getAllusers(req.query)
       .then((result) => {
-         const { total, data } = result;
+         const { totalData, totalPage, data } = result;
+         const { limit = 1, page = 3 } = req.query;
+         const nextPage = Number(page) + 1;
+         const prevPage = Number(page) - 1;
+
+         let next = `/users${req.path}?`;
+         let prev = `/users${req.path}?`;
+         if (limit) {
+            next += `limit=${limit}&`;
+            prev += `limit=${limit}&`;
+         }
+         if (page) {
+            next += `page=${nextPage}`;
+            prev += `page=${prevPage}`;
+         }
+         if (Number(page) == 1 && totalPage !== 1) {
+            const meta = {
+               totalData,
+               totalPage,
+               page: Number(page),
+               next,
+            };
+            return successResponse(res, 200, data, meta);
+         }
+         if (Number(page) == totalPage && totalPage !== 1) {
+            const meta = {
+               totalData,
+               totalPage,
+               page: Number(page),
+               prev,
+            };
+            return successResponse(res, 200, data, meta);
+         }
+         if (totalPage == 1) {
+            const meta = {
+               totalData,
+               totalPage,
+            };
+            return successResponse(res, 200, data, meta);
+         }
+         const meta = {
+            totalData,
+            totalPage,
+            next,
+            prev,
+         };
          res.status(200).json({
             data,
-            total,
+            meta,
             err: null,
          });
       })
