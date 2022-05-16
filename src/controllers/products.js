@@ -1,5 +1,5 @@
 const productsModels = require('../models/products');
-const { createProducts, getAllProducts, findProducts, updateProducts, deleteProducts, sortProductsBy, filterCategoryProducts, sortProductsFavorite, getProductsFromServer } = productsModels;
+const { createProducts, updateProducts, deleteProducts, sortProductsFavorite, getProductsFromServer } = productsModels;
 
 const { successResponse } = require('../helpers/response');
 
@@ -24,10 +24,10 @@ const postNewProducts = (req, res) => {
 };
 
 const getProducts = (req, res) => {
-   getAllProducts(req.query)
+   getProductsFromServer(req.query)
       .then((result) => {
-         const { totalData, totalPage, data } = result;
-         const { limit = 1, page = 3 } = req.query;
+         const { totalPage, totalData, data } = result;
+         const { page = 1, limit = 5 } = req.query;
          const nextPage = Number(page) + 1;
          const prevPage = Number(page) - 1;
 
@@ -79,30 +79,30 @@ const getProducts = (req, res) => {
          });
       })
       .catch((error) => {
-         const { err, status } = error;
-         res.status(status).json({
-            err,
+         const { err } = error;
+         res.status(500).json({
+            err: error.message,
             data: [],
          });
       });
 };
 
-const findProductsControllers = (req, res) => {
-   findProducts(req.query)
-      .then(({ data, total }) => {
-         res.status(200).json({
-            err: null,
-            data,
-            total,
-         });
-      })
-      .catch(({ status, err }) => {
-         res.status(status).json({
-            data: [],
-            err,
-         });
-      });
-};
+// const findProductsControllers = (req, res) => {
+//    findProducts(req.query)
+//       .then(({ data, total }) => {
+//          res.status(200).json({
+//             err: null,
+//             data,
+//             total,
+//          });
+//       })
+//       .catch(({ status, err }) => {
+//          res.status(status).json({
+//             data: [],
+//             err,
+//          });
+//       });
+// };
 
 const patchProductsControllers = (req, res) => {
    const { id } = req.params;
@@ -140,40 +140,40 @@ const deleteProductsControllers = (req, res) => {
       });
 };
 
-const filterCategoryProductsControllers = (req, res) => {
-   const category = req.params.category;
-   filterCategoryProducts(category)
-      .then(({ data }) => {
-         res.status(200).json({
-            data,
-            err: null,
-         });
-      })
-      .catch((error) => {
-         const { err, status } = error;
-         res.status(status).json({
-            data: [],
-            err,
-         });
-      });
-};
+// const filterCategoryProductsControllers = (req, res) => {
+//    const category = req.params.category;
+//    filterCategoryProducts(category)
+//       .then(({ data }) => {
+//          res.status(200).json({
+//             data,
+//             err: null,
+//          });
+//       })
+//       .catch((error) => {
+//          const { err, status } = error;
+//          res.status(status).json({
+//             data: [],
+//             err,
+//          });
+//       });
+// };
 
-const shortItems = (req, res) => {
-   sortProductsBy(req.query)
-      .then(({ data, total }) => {
-         res.status(200).json({
-            err: null,
-            data,
-            total,
-         });
-      })
-      .catch(({ status, err }) => {
-         res.status(status).json({
-            data: [],
-            err,
-         });
-      });
-};
+// const shortItems = (req, res) => {
+//    sortProductsBy(req.query)
+//       .then(({ data, total }) => {
+//          res.status(200).json({
+//             err: null,
+//             data,
+//             total,
+//          });
+//       })
+//       .catch(({ status, err }) => {
+//          res.status(status).json({
+//             data: [],
+//             err,
+//          });
+//       });
+// };
 
 const getProductsFavoriteControllers = (_, res) => {
    sortProductsFavorite()
@@ -194,31 +194,10 @@ const getProductsFavoriteControllers = (_, res) => {
       });
 };
 
-const getProductsFromServerControllers = (req, res) => {
-   getProductsFromServer(req.query)
-      .then(({ data, total }) => {
-         res.status(200).json({
-            err: null,
-            data,
-            total,
-         });
-      })
-      .catch(({ status, err }) => {
-         res.status(status).json({
-            data: [],
-            err,
-         });
-      });
-};
-
 module.exports = {
    postNewProducts,
    getProducts,
-   findProductsControllers,
    patchProductsControllers,
    deleteProductsControllers,
-   shortItems,
-   filterCategoryProductsControllers,
    getProductsFavoriteControllers,
-   getProductsFromServerControllers,
 };
