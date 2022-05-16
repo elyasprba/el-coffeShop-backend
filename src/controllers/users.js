@@ -22,7 +22,7 @@ const getUsersControllers = (req, res) => {
    getAllusers(req.query)
       .then((result) => {
          const { totalData, totalPage, data } = result;
-         const { limit = 1, page = 3 } = req.query;
+         const { limit = 1, page = 2 } = req.query;
          const nextPage = Number(page) + 1;
          const prevPage = Number(page) - 1;
 

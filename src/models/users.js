@@ -22,7 +22,7 @@ const createUsers = (body) => {
 
 const getAllusers = (query) => {
    return new Promise((resolve, reject) => {
-      const { page, limit } = query;
+      const { page = 1, limit = 2 } = query;
       const offset = (Number(page) - 1) * Number(limit);
       db.query('SELECT * FROM users ORDER BY id LIMIT $1 OFFSET $2', [Number(limit), offset])
          .then((result) => {

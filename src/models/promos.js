@@ -23,22 +23,34 @@ const createPromos = (body) => {
    });
 };
 
-const getAllPromos = () => {
+const getAllPromos = (query) => {
    return new Promise((resolve, reject) => {
-      db.query('SELECT *  FROM promos')
+      const { page = 1, limit = 2 } = query;
+      const offset = (Number(page) - 1) * Number(limit);
+      db.query('SELECT * FROM promos ORDER BY id LIMIT $1 OFFSET $2', [Number(limit), offset])
          .then((result) => {
             const response = {
-               total: result.rowCount,
                data: result.rows,
             };
-            resolve(response);
+            db.query('SELECT COUNT(*) AS count_promos FROM promos')
+               .then((result) => {
+                  response.totalData = Number(result.rows[0]['count_promos']);
+                  response.totalPage = Math.ceil(response.totalData / Number(limit));
+                  resolve(response);
+               })
+               .catch((err) => {
+                  reject({
+                     status: 500,
+                     err,
+                  });
+               });
          })
-         .catch((err) => {
+         .catch((err) =>
             reject({
                status: 500,
                err,
-            });
-         });
+            })
+         );
    });
 };
 

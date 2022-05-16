@@ -1,6 +1,5 @@
-const promosModels = require('../models/promos');
-
-const { createPromos, getAllPromos, findPromos, updatePromos, deletePromos } = promosModels;
+const { createPromos, getAllPromos, findPromos, updatePromos, deletePromos } = require('../models/promos');
+const { successResponse } = require('../helpers/response');
 
 const postPromosControllers = (req, res) => {
    createPromos(req.body)
@@ -18,13 +17,58 @@ const postPromosControllers = (req, res) => {
       });
 };
 
-const getPromosControllers = (_, res) => {
-   getAllPromos()
+const getPromosControllers = (req, res) => {
+   getAllPromos(req.query)
       .then((result) => {
-         const { total, data } = result;
+         const { totalData, totalPage, data } = result;
+         const { limit = 1, page = 2 } = req.query;
+         const nextPage = Number(page) + 1;
+         const prevPage = Number(page) - 1;
+
+         let next = `/promos${req.path}?`;
+         let prev = `/promos${req.path}?`;
+         if (limit) {
+            next += `limit=${limit}&`;
+            prev += `limit=${limit}&`;
+         }
+         if (page) {
+            next += `page=${nextPage}`;
+            prev += `page=${prevPage}`;
+         }
+         if (Number(page) == 1 && totalPage !== 1) {
+            const meta = {
+               totalData,
+               totalPage,
+               page: Number(page),
+               next,
+            };
+            return successResponse(res, 200, data, meta);
+         }
+         if (Number(page) == totalPage && totalPage !== 1) {
+            const meta = {
+               totalData,
+               totalPage,
+               page: Number(page),
+               prev,
+            };
+            return successResponse(res, 200, data, meta);
+         }
+         if (totalPage == 1) {
+            const meta = {
+               totalData,
+               totalPage,
+            };
+            return successResponse(res, 200, data, meta);
+         }
+         const meta = {
+            totalData,
+            totalPage,
+            next,
+            prev,
+         };
          res.status(200).json({
             data,
-            total,
+            meta,
             err: null,
          });
       })
