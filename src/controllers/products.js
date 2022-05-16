@@ -1,7 +1,7 @@
 const productsModels = require('../models/products');
-const { createProducts, getAllProducts, findProducts, updateProducts, deleteProducts, sortProductsBy, filterCategoryProducts, sortProductsFavorite } = productsModels;
+const { createProducts, getAllProducts, findProducts, updateProducts, deleteProducts, sortProductsBy, filterCategoryProducts, sortProductsFavorite, getProductsFromServer } = productsModels;
 
-const { successResponse, errorResponse } = require('../helpers/response');
+const { successResponse } = require('../helpers/response');
 
 const postNewProducts = (req, res) => {
    const { file = null } = req;
@@ -194,6 +194,23 @@ const getProductsFavoriteControllers = (_, res) => {
       });
 };
 
+const getProductsFromServerControllers = (req, res) => {
+   getProductsFromServer(req.query)
+      .then(({ data, total }) => {
+         res.status(200).json({
+            err: null,
+            data,
+            total,
+         });
+      })
+      .catch(({ status, err }) => {
+         res.status(status).json({
+            data: [],
+            err,
+         });
+      });
+};
+
 module.exports = {
    postNewProducts,
    getProducts,
@@ -203,4 +220,5 @@ module.exports = {
    shortItems,
    filterCategoryProductsControllers,
    getProductsFavoriteControllers,
+   getProductsFromServerControllers,
 };

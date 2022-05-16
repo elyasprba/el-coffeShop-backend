@@ -52,6 +52,50 @@ const getAllProducts = (query) => {
    });
 };
 
+const getProductsFromServer = (query) => {
+   return new Promise((resolve, reject) => {
+      const { name, category_name, order, sort } = query;
+      let parameterized = [];
+      let sqlQuery = 'select products.name, products.price, category.name as category_name FROM products join category on products.category = category.id';
+      if (name && !category_name) {
+         sqlQuery += " WHERE LOWER(products.name) LIKE LOWER('%' || $1 || '%')";
+         parameterized.push(name);
+      }
+      if (!name && category_name) {
+         sqlQuery += ' WHERE LOWER(category.name) = $1';
+         parameterized.push(category_name);
+      }
+      if (name && category_name) {
+         sqlQuery += " WHERE LOWER(products.name) LIKE LOWER('%' || $1 || '%') AND LOWER(category.name) = $2";
+         parameterized.push(name, category_name);
+      }
+
+      if (sort) {
+         sqlQuery += ' order by ' + sort + ' ' + order;
+      }
+      db.query(sqlQuery, parameterized)
+         .then((result) => {
+            if (result.rows.length === 0) {
+               return reject({
+                  status: 404,
+                  err: 'Products Not Found',
+               });
+            }
+            const response = {
+               total: result.rowCount,
+               data: result.rows,
+            };
+            resolve(response);
+         })
+         .catch((err) => {
+            reject({
+               status: 500,
+               err,
+            });
+         });
+   });
+};
+
 const findProducts = (query) => {
    return new Promise((resolve, reject) => {
       const name = query.name;
@@ -199,4 +243,5 @@ module.exports = {
    sortProductsBy,
    filterCategoryProducts,
    sortProductsFavorite,
+   getProductsFromServer,
 };
