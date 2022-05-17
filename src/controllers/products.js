@@ -89,23 +89,6 @@ const getProducts = (req, res) => {
       });
 };
 
-// const findProductsControllers = (req, res) => {
-//    findProducts(req.query)
-//       .then(({ data, total }) => {
-//          res.status(200).json({
-//             err: null,
-//             data,
-//             total,
-//          });
-//       })
-//       .catch(({ status, err }) => {
-//          res.status(status).json({
-//             data: [],
-//             err,
-//          });
-//       });
-// };
-
 const patchProductsControllers = (req, res) => {
    const { id } = req.params;
    const { file = null } = req;
@@ -141,41 +124,6 @@ const deleteProductsControllers = (req, res) => {
          });
       });
 };
-
-// const filterCategoryProductsControllers = (req, res) => {
-//    const category = req.params.category;
-//    filterCategoryProducts(category)
-//       .then(({ data }) => {
-//          res.status(200).json({
-//             data,
-//             err: null,
-//          });
-//       })
-//       .catch((error) => {
-//          const { err, status } = error;
-//          res.status(status).json({
-//             data: [],
-//             err,
-//          });
-//       });
-// };
-
-// const shortItems = (req, res) => {
-//    sortProductsBy(req.query)
-//       .then(({ data, total }) => {
-//          res.status(200).json({
-//             err: null,
-//             data,
-//             total,
-//          });
-//       })
-//       .catch(({ status, err }) => {
-//          res.status(status).json({
-//             data: [],
-//             err,
-//          });
-//       });
-// };
 
 const getProductsFavoriteControllers = (_, res) => {
    sortProductsFavorite()

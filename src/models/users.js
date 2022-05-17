@@ -74,7 +74,6 @@ const updateUsers = (id, file, body) => {
    return new Promise((resolve, reject) => {
       const { email, password, phone_number, display_name, first_name, last_name, address, gender, birthday_date } = body;
       const updated_at = new Date(Date.now());
-      // const pict = file ? file.path.replace('public', '').replace(/\\/g, '/') : null;
       let pict = null;
       if (file !== null) {
          pict = file.path.replace('public', '').replace(/\\/g, '/');
