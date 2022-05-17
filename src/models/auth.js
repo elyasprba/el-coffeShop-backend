@@ -34,7 +34,7 @@ const getEmailUsers = (email) => {
 
 const getPassByUserEmail = async (email) => {
    try {
-      const sqlQuery = 'SELECT id, password FROM users WHERE email = $1';
+      const sqlQuery = 'SELECT id, password, role FROM users WHERE email = $1';
       const result = await db.query(sqlQuery, [email]);
       if (result.rowCount === 0) {
          throw { status: 400, err: { msg: 'Email is not registered' } };

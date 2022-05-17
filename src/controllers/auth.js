@@ -36,6 +36,7 @@ const login = async (req, res) => {
       const payload = {
          id: data.id,
          email,
+         role: data.role,
       };
       const jwtOption = {
          issuer: process.env.JWT_ISSUER,
