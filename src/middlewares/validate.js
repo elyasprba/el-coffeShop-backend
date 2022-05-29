@@ -9,8 +9,7 @@ const validateCreateUsers = [
       const error = validationResult(req);
       if (!error.isEmpty()) {
          return res.status(400).json({
-            msg: 'Create users invalid',
-            error: error.array(),
+            msg: 'email, password, and phone number invalid',
          });
       }
       next();
