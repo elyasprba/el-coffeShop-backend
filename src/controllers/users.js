@@ -102,7 +102,7 @@ const patchUsersControllers = (req, res) => {
 };
 
 const findUsersControllers = (req, res) => {
-   const id = req.params.id;
+   const id = req.userPayload.id;
    findUsers(id)
       .then(({ data }) => {
          // const { data } = result;
