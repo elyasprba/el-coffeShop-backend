@@ -28,7 +28,7 @@ const getProducts = (req, res) => {
       .then((result) => {
          const { totalPage, totalData, data } = result;
          data.forEach((data) => delete data.total);
-         const { page = 1, limit = 5 } = req.query;
+         const { page = 1, limit = 12 } = req.query;
          const nextPage = Number(page) + 1;
          const prevPage = Number(page) - 1;
 

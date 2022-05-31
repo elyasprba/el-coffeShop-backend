@@ -23,7 +23,7 @@ const createProducts = (body, file) => {
 
 const getProductsFromServer = (query) => {
    return new Promise((resolve, reject) => {
-      const { name, category_name, order, sort, page = 1, limit = 5 } = query;
+      const { name, category_name, order, sort, page = 1, limit = 12 } = query;
       let parameterized = [];
       let sqlQuery = 'select count(*) over() as total, products.id, products.name, products.price, products.pict, category.name as category_name FROM products join category on products.category = category.id';
       if (name && !category_name) {
