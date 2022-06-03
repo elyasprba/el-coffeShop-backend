@@ -1,5 +1,5 @@
 const productsModels = require('../models/products');
-const { createProducts, updateProducts, deleteProducts, sortProductsFavorite, getProductsFromServer } = productsModels;
+const { createProducts, updateProducts, deleteProducts, sortProductsFavorite, getProductsFromServer, getSingleProductsFromServer } = productsModels;
 
 const { successResponse } = require('../helpers/response');
 
@@ -19,6 +19,25 @@ const postNewProducts = (req, res) => {
          res.status(status).json({
             data: [],
             err,
+         });
+      });
+};
+
+const getProductsById = (req, res) => {
+   const { id } = req.params;
+   getSingleProductsFromServer(id)
+      .then((result) => {
+         const { data } = result;
+         res.status(200).json({
+            data,
+            err: null,
+         });
+      })
+      .catch((error) => {
+         const { err, status } = error;
+         res.status(status).json({
+            err,
+            data: [],
          });
       });
 };
@@ -147,6 +166,7 @@ const getProductsFavoriteControllers = (_, res) => {
 module.exports = {
    postNewProducts,
    getProducts,
+   getProductsById,
    patchProductsControllers,
    deleteProductsControllers,
    getProductsFavoriteControllers,

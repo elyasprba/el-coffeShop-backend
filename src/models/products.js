@@ -21,6 +21,25 @@ const createProducts = (body, file) => {
    });
 };
 
+const getSingleProductsFromServer = (id) => {
+   return new Promise((resolve, reject) => {
+      const sqlQuery = 'select * from products where id = $1';
+      db.query(sqlQuery, [id])
+         .then((result) => {
+            if (result.rows.length === 0) {
+               return reject({ status: 404, err: 'Product Not Found' });
+            }
+            const response = {
+               data: result.rows,
+            };
+            resolve(response);
+         })
+         .catch((err) => {
+            reject({ status: 500, err });
+         });
+   });
+};
+
 const getProductsFromServer = (query) => {
    return new Promise((resolve, reject) => {
       const { name, category_name, order, sort, page = 1, limit = 12 } = query;
@@ -140,6 +159,7 @@ const sortProductsFavorite = () => {
 
 module.exports = {
    createProducts,
+   getSingleProductsFromServer,
    updateProducts,
    deleteProducts,
    sortProductsFavorite,
