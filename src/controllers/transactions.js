@@ -19,7 +19,7 @@ const createTransactionsControllers = (req, res) => {
 };
 
 const getSingleTransactionsControllers = (req, res) => {
-   const id = req.params.id;
+   const id = req.userPayload.id;
    getSingleTransactions(id)
       .then(({ data }) => {
          res.status(200).json({

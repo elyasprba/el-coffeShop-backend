@@ -4,7 +4,7 @@ const transactionsControllers = require('../controllers/transactions');
 const { checkToken, roleUser } = require('../middlewares/auth');
 
 Router.post('/', checkToken, roleUser, transactionsControllers.createTransactionsControllers);
-Router.get('/:id', transactionsControllers.getSingleTransactionsControllers);
+Router.get('/', checkToken, transactionsControllers.getSingleTransactionsControllers);
 Router.patch('/:id', transactionsControllers.updateTransactionsControllers);
 Router.delete('/:id', transactionsControllers.deleteControllersControllers);
 
