@@ -140,7 +140,7 @@ const deleteProducts = (id) => {
 
 const sortProductsFavorite = () => {
    return new Promise((resolve, reject) => {
-      db.query('select transactions.name_products as name, products.price, products.pict, products.id from transactions join products on transactions.name_products = products.name group by transactions.name_products, products.price, products.pict, products.id order by count(*) desc')
+      db.query('select transactions.products_id, products.price, products.pict, products.name from transactions join products on transactions.products_id = products.id group by transactions.products_id, products.price, products.pict, products.name order by count(*) desc')
          .then((result) => {
             const response = {
                total: result.rowCount,
