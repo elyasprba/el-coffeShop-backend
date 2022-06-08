@@ -25,7 +25,7 @@ const createTransactions = (body) => {
 
 const getSingleTransactions = (id) => {
    return new Promise((resolve, reject) => {
-      const sqlQuery = 'select products.name, transactions.total from transactions join products on transactions.products_id = products.id where transactions.users_id = $1';
+      const sqlQuery = 'select products.name, transactions.total, products.pict from transactions join products on transactions.products_id = products.id where transactions.users_id = $1';
       db.query(sqlQuery, [id])
          .then((data) => {
             if (data.rows.length === 0) {
