@@ -6,7 +6,7 @@ const { upload } = require('../middlewares/upload');
 
 Router.post('/', checkToken, roleAdmin, upload.single('pict'), productsControllers.postNewProducts);
 Router.get('/all', productsControllers.getProducts);
-Router.get('/fav', productsControllers.getProductsFavoriteControllers);
+Router.get('/favorite', productsControllers.getProductsFavoriteControllers);
 Router.get('/:id', productsControllers.getProductsById);
 Router.delete('/:id', productsControllers.deleteProductsControllers);
 Router.patch('/:id', checkToken, upload.single('pict'), productsControllers.patchProductsControllers);
