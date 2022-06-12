@@ -8,7 +8,7 @@ const authRouter = require('./auth');
 
 Router.get('/', (req, res) => {
    res.json({
-      message: 'SELAMAT DATANG BOS',
+      message: 'Welcome el-CoffeeShop',
    });
 });
 

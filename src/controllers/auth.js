@@ -33,11 +33,16 @@ const login = async (req, res) => {
       if (!result) {
          return errorResponse(res, 400, { msg: 'Email or Password is wrong' });
       }
+
       const payload = {
          id: data.id,
          email,
          role: data.role,
+         address: data.address,
+         name: data.name,
+         phone_number: data.phone_number,
       };
+
       const jwtOption = {
          issuer: process.env.JWT_ISSUER,
          expiresIn: '100000000000s',
