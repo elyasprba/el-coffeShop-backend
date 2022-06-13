@@ -3,11 +3,11 @@ const { v4: uuidv4 } = require('uuid');
 
 const createTransactions = (body) => {
    return new Promise((resolve, reject) => {
-      const { name_products, qty, size, subtotal, tax, shipping, total } = body;
+      const { name_products, qty, size, subtotal, tax, shipping, total, users_id } = body;
       const id = uuidv4();
       const timestemp = new Date(Date.now());
-      const sqlQuery = 'INSERT INTO transactions (id, name_products, qty, size, subtotal, tax, shipping, total, created_at) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *';
-      db.query(sqlQuery, [id, name_products, qty, size, subtotal, tax, shipping, total, timestemp])
+      const sqlQuery = 'INSERT INTO transactions (id, products_id, qty, size, subtotal, tax, shipping, total, created_at, users_id) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *';
+      db.query(sqlQuery, [id, name_products, qty, size, subtotal, tax, shipping, total, timestemp, users_id])
          .then(({ rows }) => {
             const response = {
                data: rows[0],
