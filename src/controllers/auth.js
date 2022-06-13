@@ -39,7 +39,7 @@ const login = async (req, res) => {
          email,
          role: data.role,
          address: data.address,
-         name: data.name,
+         name: data.display_name,
          phone_number: data.phone_number,
       };
 
@@ -48,7 +48,7 @@ const login = async (req, res) => {
          expiresIn: '100000000000s',
       };
       const token = jwt.sign(payload, process.env.JWT_SECRET, jwtOption);
-      successResponse(res, 200, { msg: 'Login Succsessfull', email, token }, null);
+      successResponse(res, 200, { msg: 'Login Succsessfull', token, payload }, null);
    } catch (error) {
       const { status, err } = error;
       errorResponse(res, status, err);
