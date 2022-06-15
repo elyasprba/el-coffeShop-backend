@@ -18,7 +18,7 @@ db.connect()
       server.use(express.json());
       // cors
       const corsOptions = {
-         origin: ['*', 'https://62a9d24281a1ab00081d6099--el-coffee-shop.netlify.app'],
+         origin: ['*', 'https://el-coffee-shop.netlify.app'],
          methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
          allowedHeaders: ['Content-Type', 'Authorization'],
       };
