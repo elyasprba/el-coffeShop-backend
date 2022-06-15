@@ -18,7 +18,7 @@ db.connect()
       server.use(express.json());
       // cors
       const corsOptions = {
-         origin: '*',
+         origin: ['*', process.env.PORT],
          methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
          allowedHeaders: ['Content-Type', 'Authorization'],
       };
