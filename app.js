@@ -18,7 +18,7 @@ db.connect()
       server.use(express.json());
       // cors
       const corsOptions = {
-         origin: ['*', process.env.PORT],
+         origin: ['*', 'https://elcoffee.pagekite.me'],
          methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
          allowedHeaders: ['Content-Type', 'Authorization'],
       };
