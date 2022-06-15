@@ -7,7 +7,7 @@ const cors = require('cors');
 const logger = require('morgan');
 
 const server = express();
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 
 db.connect()
    .then(() => {
