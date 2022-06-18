@@ -41,6 +41,7 @@ const login = async (req, res) => {
          address: data.address,
          name: data.display_name,
          phone_number: data.phone_number,
+         pict: data.pict,
       };
 
       const jwtOption = {
