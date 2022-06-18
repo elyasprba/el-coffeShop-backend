@@ -6,7 +6,8 @@ const createProducts = (body, file) => {
       const { name, description, size, delivery_info, category, price } = body;
       const id = uuidv4();
       const created_at = new Date(Date.now());
-      const pict = file.path.replace('public', '').replace(/\\/g, '/');
+      // const pict = file.path.replace('public', '').replace(/\\/g, '/');
+      const pict = file.path;
       const sqlQuery = 'INSERT INTO products(id, name, description, size, delivery_info, category, price, pict, created_at) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *';
       db.query(sqlQuery, [id, name, description, size, delivery_info, category, price, pict, created_at])
          .then((result) => {
@@ -94,7 +95,7 @@ const updateProducts = (id, file, body) => {
       const updated_at = new Date(Date.now());
       let pict = null;
       if (file !== null) {
-         pict = file.path.replace('public', '').replace(/\\/g, '/');
+         pict = file.path;
       }
       const sqlQuery = "UPDATE products SET name = coalesce(nullif($1, ''), name), description = coalesce(nullif($2, ''), description), size = coalesce(nullif($3, ''), size), stock = coalesce(nullif($4, '')::int8, stock), delivery_info = coalesce(nullif($5, ''), delivery_info), category = coalesce(nullif($6, ''), category), price = coalesce(nullif($7, '')::int8, price), pict = coalesce($8, pict), updated_at = $9 WHERE id = $10 returning *";
       db.query(sqlQuery, [name, description, size, stock, delivery_info, category, price, pict, updated_at, id])

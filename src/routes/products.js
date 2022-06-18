@@ -5,7 +5,7 @@ const { checkToken, roleAdmin } = require('../middlewares/auth');
 const { upload } = require('../middlewares/upload');
 
 Router.post('/', checkToken, roleAdmin, upload.single('pict'), productsControllers.postNewProducts);
-Router.get('/all', productsControllers.getProducts);
+Router.get('/', productsControllers.getProducts);
 Router.get('/favorite', productsControllers.getProductsFavoriteControllers);
 Router.get('/:id', productsControllers.getProductsById);
 Router.delete('/:id', productsControllers.deleteProductsControllers);

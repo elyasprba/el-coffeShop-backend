@@ -1,16 +1,25 @@
 const multer = require('multer');
 const path = require('path');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
-const storage = multer.diskStorage({
-   destination: (req, file, cb) => {
-      cb(null, './public/images');
-   },
-   filename: (req, file, cb) => {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-      const filename = file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname);
-      cb(null, filename);
+const cloudinaryStorage = new CloudinaryStorage({
+   cloudinary: cloudinary,
+   params: {
+      folder: 'el-coffee',
    },
 });
+
+// const storage = multer.diskStorage({
+//    destination: (req, file, cb) => {
+//       cb(null, './public/images');
+//    },
+//    filename: (req, file, cb) => {
+//       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+//       const filename = file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname);
+//       cb(null, filename);
+//    },
+// });
 
 const fileFilter = (req, file, cb) => {
    const extName = path.extname(file.originalname);
@@ -22,7 +31,7 @@ const fileFilter = (req, file, cb) => {
 };
 
 const upload = multer({
-   storage: storage,
+   storage: cloudinaryStorage,
    fileFilter,
    limits: {
       fileSize: 2097152, // 2MB

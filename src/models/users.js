@@ -76,7 +76,7 @@ const updateUsers = (id, file, body) => {
       const updated_at = new Date(Date.now());
       let pict = null;
       if (file !== null) {
-         pict = file.path.replace('public', '').replace(/\\/g, '/');
+         pict = file.path;
       }
       const sqlQuery =
          'UPDATE users SET email = coalesce($1, email), password = coalesce($2, password), phone_number = coalesce($3, phone_number), display_name = coalesce($4, display_name), first_name = coalesce($5, first_name), last_name = coalesce($6, last_name), address = coalesce($7, address), gender = coalesce($8, gender), birthday_date = coalesce($9, birthday_date), pict = coalesce($10, pict), updated_at = $11 WHERE id = $12 returning email, phone_number, pict, display_name, first_name, last_name, address, gender, birthday_date';

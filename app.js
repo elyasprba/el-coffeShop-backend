@@ -5,6 +5,7 @@ const mainRouter = require('./src/routes/index');
 const db = require('./src/config/db');
 const cors = require('cors');
 const logger = require('morgan');
+const cloudConfig = require('./src/config/cloudinary');
 
 const server = express();
 const PORT = process.env.PORT || 8080;
@@ -18,12 +19,12 @@ db.connect()
       server.use(express.json());
       // cors
       const corsOptions = {
-         origin: ['http://192.168.1.3:8080', 'http://localhost:3000', 'https://el-coffee-shop.netlify.app'],
+         origin: ['*', 'http://localhost:3000', 'https://el-coffee-shop.netlify.app'],
          methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
          allowedHeaders: ['Content-Type', 'Authorization'],
       };
       server.use(cors(corsOptions));
-
+      server.use(cloudConfig);
       server.use(express.static('public'));
       server.use(logger(':method :url :status :res[content-length] - :response-time ms'));
 
