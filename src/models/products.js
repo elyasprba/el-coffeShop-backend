@@ -7,7 +7,7 @@ const createProducts = (body, file) => {
       const id = uuidv4();
       const created_at = new Date(Date.now());
       // const pict = file.path.replace('public', '').replace(/\\/g, '/');
-      const pict = file.path;
+      const pict = file ? file.path : null;
       const sqlQuery = 'INSERT INTO products(id, name, description, size, delivery_info, category, price, pict, created_at) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *';
       db.query(sqlQuery, [id, name, description, size, delivery_info, category, price, pict, created_at])
          .then((result) => {
