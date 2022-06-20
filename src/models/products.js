@@ -3,13 +3,13 @@ const { v4: uuidv4 } = require('uuid');
 
 const createProducts = (body, file) => {
    return new Promise((resolve, reject) => {
-      const { name, description, size, delivery_info, category, price } = body;
+      const { name, description, size, delivery_info, category, price, stock } = body;
       const id = uuidv4();
       const created_at = new Date(Date.now());
       // const pict = file.path.replace('public', '').replace(/\\/g, '/');
       const pict = file ? file.path : null;
-      const sqlQuery = 'INSERT INTO products(id, name, description, size, delivery_info, category, price, pict, created_at) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *';
-      db.query(sqlQuery, [id, name, description, size, delivery_info, category, price, pict, created_at])
+      const sqlQuery = 'INSERT INTO products(id, name, description, size, delivery_info, category, price, pict, stock, created_at) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *';
+      db.query(sqlQuery, [id, name, description, size, delivery_info, category, price, pict, stock, created_at])
          .then((result) => {
             const response = {
                data: result.rows[0],
