@@ -18,22 +18,42 @@ Repository Backend - el-Coffee Shop
 -  Clone This Repo
 
 ```
-git clone https://github.com/elyasprba/el-coffeShop-backend.git
+$  git clone https://github.com/elyasprba/el-coffeShop-backend.git
 ```
 
 -  Go To Folder Repo
 
 ```
-cd el-coffeeshop
+$  cd el-coffeeshop
+```
+
+-  Setup .env
+
+```
+DB_USER
+DB_HOST
+DB_DATABASE
+DB_PASSWORD
+DB_PORT
+DATABASE_URL
+JWT_SECRET
+JWT_ISSUER
+CLOUD_NAME
+CLOUD_API
+CLOUD_SECRET
 ```
 
 -  Install Module
 
 ```
-npm install
+$  npm install
 ```
 
--  Type `npm run startDev` To Start The Project
+-  To Start The Project
+
+```
+$  npm run startDe
+```
 
 <br/>
 
@@ -61,6 +81,17 @@ Link project : [el-CoffeeShop](https://el-coffee-shop.netlify.app)
 -  [Nodemon](https://www.npmjs.com/package/nodemon)
 
 <br>
+
+## 🖇 Endpoint Details
+
+| Endpoint     |               Method                | Info              |
+| ------------ | :---------------------------------: | :---------------- |
+| /auth        |               `POST`                | Auth              |
+| /users       |            `GET` `POST`             | Users             |
+| /users/:id   |       `GET` `PATCH` `DELETE`        | Histories         |
+| /products    | `POST` `GET` `PUT` `PATCH` `DELETE` | Product Histories |
+| /promos      |    `POST` `GET` `PATCH` `DELETE`    | Categories        |
+| /transaction | `POST` `GET` `PUT` `PATCH` `DELETE` | Products          |
 
 ## 📄 Documentation
 
