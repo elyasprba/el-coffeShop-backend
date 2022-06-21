@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./public/images/coffee-1.png" alt="el-CoffeeShop" width='100'>
+  <img src="./assets/img/coffee-1.png" alt="el-CoffeeShop" width='70'>
 </p>
 <div align="center">
 <h1>el-Coffee Shop</h1>
