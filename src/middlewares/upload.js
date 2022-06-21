@@ -10,22 +10,38 @@ const cloudinaryStorage = new CloudinaryStorage({
    },
 });
 
-const fileFilter = (req, file, cb) => {
+// menentukan ukuran
+const limit = {
+   fileSize: 2e6,
+};
+
+//  menentukan ektensi file upload
+const imageOnlyFilter = (req, file, cb) => {
    const extName = path.extname(file.originalname);
-   const allowedExt = /jpg|png/;
-   if (!allowedExt.test(extName)) {
-      return cb(new Error('Only Use Allowed Extension (JPG, PNG)'), false);
-   }
+   const allowedExt = /jpg|jpeg|png|JPG|JPEG|PNG/;
+   if (!allowedExt.test(extName)) return cb(new Error('File Extension JPG or PNG 2mb'), false);
    cb(null, true);
 };
 
-const upload = multer({
+// upload image
+const imageUpload = multer({
+   // storage: imageStorage,
    storage: cloudinaryStorage,
-   fileFilter,
-   limits: {
-      fileSize: 2097152, // 2MB
-   },
-});
+   limits: limit,
+   fileFilter: imageOnlyFilter,
+}).single('photo');
+
+const upload = (req, res, next) => {
+   imageUpload(req, res, (err) => {
+      if (err) {
+         res.status(400).json({
+            error: err.message,
+         });
+         return;
+      }
+      next();
+   });
+};
 
 module.exports = {
    upload,

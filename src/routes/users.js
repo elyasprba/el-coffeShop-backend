@@ -8,7 +8,7 @@ const { upload } = require('../middlewares/upload');
 Router.post('/', validate.validateCreateUsers, userController.postUsersControllers);
 Router.get('/all', userController.getUsersControllers);
 Router.get('/profile-detail', checkToken, userController.findUsersControllers);
-Router.patch('/', checkToken, upload.single, userController.patchUsersControllers);
+Router.patch('/', checkToken, upload, userController.patchUsersControllers);
 Router.delete('/:id', userController.deleteUsersControllers);
 
 module.exports = Router;
