@@ -1,6 +1,7 @@
 const userModels = require('../models/users');
-const { createUsers, getAllusers, findUsers, deleteUsers, updateUsers } = userModels;
-const { successResponse, errorResponse } = require('../helpers/response');
+const { createUsers, getAllusers, findUsers, deleteUsers, updateUsers, updateUserPassword } = userModels;
+const { successResponse } = require('../helpers/response');
+const { client } = require('../config/redis');
 
 const postUsersControllers = (req, res) => {
    createUsers(req.body)
@@ -138,10 +139,34 @@ const deleteUsersControllers = (req, res) => {
       });
 };
 
+const patchUserPassword = async (req, res) => {
+   try {
+      const { email, newPassword, confirmCode } = req.body;
+      const confirm = await client.get(`forgotpass${email}`);
+      if (confirm !== confirmCode) {
+         res.status(403).json({ error: 'Invalid Confirmation Code !' });
+         return;
+      }
+      const { message } = await updateUserPassword(newPassword, email);
+      if (message) {
+         await client.del(`forgotpass${email}`);
+      }
+      res.status(200).json({
+         message,
+      });
+   } catch (error) {
+      const { message, status } = error;
+      res.status(status ? status : 500).json({
+         error: message,
+      });
+   }
+};
+
 module.exports = {
    postUsersControllers,
    getUsersControllers,
    findUsersControllers,
    patchUsersControllers,
    deleteUsersControllers,
+   patchUserPassword,
 };

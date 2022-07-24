@@ -2,6 +2,9 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { successResponse, errorResponse } = require('../helpers/response');
 const { register, getPassByUserEmail } = require('../models/auth');
+const { client } = require('../config/redis');
+const generator = require('generate-password');
+const { sendPasswordConfirmation } = require('../config/nodmailer');
 
 const registerControllers = (req, res) => {
    const {
@@ -33,7 +36,6 @@ const login = async (req, res) => {
       if (!result) {
          return errorResponse(res, 400, { msg: 'Email or Password is wrong' });
       }
-
       const payload = {
          id: data.id,
          email,
@@ -43,7 +45,6 @@ const login = async (req, res) => {
          phone_number: data.phone_number,
          pict: data.pict,
       };
-
       const jwtOption = {
          issuer: process.env.JWT_ISSUER,
          expiresIn: '100000000000s',
@@ -56,7 +57,28 @@ const login = async (req, res) => {
    }
 };
 
+const forgotPassword = async (req, res) => {
+   try {
+      const { email } = req.params;
+      const confirmCode = generator.generate({
+         length: 6,
+         numbers: true,
+      });
+      await sendPasswordConfirmation(email, confirmCode);
+      await client.set(`forgotpass${email}`, confirmCode);
+      res.status(200).json({
+         msg: 'Please check your email for password confirmation',
+      });
+   } catch (error) {
+      const { message, status } = error;
+      res.status(status ? status : 500).json({
+         error: message,
+      });
+   }
+};
+
 module.exports = {
    registerControllers,
    login,
+   forgotPassword,
 };

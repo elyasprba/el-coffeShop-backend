@@ -6,9 +6,13 @@ const db = require('./src/config/db');
 const cors = require('cors');
 const logger = require('morgan');
 const cloudConfig = require('./src/config/cloudinary');
+const { redisConn } = require('./src/config/redis');
 
 const server = express();
 const PORT = process.env.PORT || 8080;
+
+// Redis
+redisConn();
 
 db.connect()
    .then(() => {
