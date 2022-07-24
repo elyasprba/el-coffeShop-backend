@@ -18,10 +18,10 @@ const sendPasswordConfirmation = async (email, confirmCode) => {
       <h3>Here is your account details:</h3>
       <ul>
       <li>Email: <h3>${email}</h3></li>
-    </ul>
-    YOUR RESET PASSWORD CONFIRMATION CODE: <h1>${confirmCode}</h1> <br>
-    INPUT THIS CODE WHEN RESET YOUR PASSWORD !
-    <h2> <a href=${process.env.CLIENT_URL}/auth/forgot/${email}> Click here to reset your password</a></h2>
+      </ul>
+      </div>
+      YOUR RESET PASSWORD CONFIRMATION CODE: <h1>${confirmCode}</h1> <br>
+      INPUT THIS CODE WHEN RESET YOUR PASSWORD !
       </div>`;
 
       let mailOptions = {
