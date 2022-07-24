@@ -1,5 +1,6 @@
 const db = require('../config/db');
 const bcrypt = require('bcrypt');
+const { ErrorHandler } = require('../helpers/errorHandler');
 
 const createUsers = (body) => {
    return new Promise((resolve, reject) => {
@@ -133,6 +134,27 @@ const updateUserPassword = async (newPassword, email) => {
    }
 };
 
+const updateNewPassword = async (id, body) => {
+   try {
+      const { password } = body;
+      const updated_at = new Date(Date.now());
+      let hashedNewPassword = null;
+      if (password) {
+         hashedNewPassword = await bcrypt.hash(password, 10);
+      }
+      const sqlQuery = await db.query('UPDATE users SET password = coalesce($1, password), updated_at = $2 WHERE id = $3', [hashedNewPassword, updated_at, id]);
+      if (!sqlQuery.rowCount) throw new ErrorHandler({ status: 404, message: 'Id Not Found' });
+      console.log(hashedNewPassword);
+      console.log(password);
+      return {
+         message: 'Update successful',
+      };
+   } catch (error) {
+      const { status, message } = error;
+      throw new ErrorHandler({ status: status ? status : 500, message });
+   }
+};
+
 module.exports = {
    createUsers,
    getAllusers,
@@ -140,4 +162,5 @@ module.exports = {
    updateUsers,
    deleteUsers,
    updateUserPassword,
+   updateNewPassword,
 };

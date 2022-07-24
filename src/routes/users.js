@@ -9,6 +9,7 @@ Router.post('/', validate.validateCreateUsers, userController.postUsersControlle
 Router.get('/all', userController.getUsersControllers);
 Router.get('/profile-detail', checkToken, userController.findUsersControllers);
 Router.patch('/', checkToken, upload, userController.patchUsersControllers);
+Router.patch('/edit-password', checkToken, userController.patchUserInfoControllers);
 Router.delete('/:id', userController.deleteUsersControllers);
 Router.patch('/update-password', userController.patchUserPassword);
 

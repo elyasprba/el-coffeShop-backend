@@ -1,5 +1,5 @@
 const userModels = require('../models/users');
-const { createUsers, getAllusers, findUsers, deleteUsers, updateUsers, updateUserPassword } = userModels;
+const { createUsers, getAllusers, findUsers, deleteUsers, updateUsers, updateUserPassword, updateNewPassword } = userModels;
 const { successResponse } = require('../helpers/response');
 const { client } = require('../config/redis');
 
@@ -162,6 +162,20 @@ const patchUserPassword = async (req, res) => {
    }
 };
 
+const patchUserInfoControllers = async (req, res) => {
+   try {
+      const { message } = await updateNewPassword(req.userPayload.id, req.body);
+      res.status(200).json({
+         message,
+      });
+   } catch (error) {
+      const { message, status } = error;
+      res.status(status ? status : 500).json({
+         error: message,
+      });
+   }
+};
+
 module.exports = {
    postUsersControllers,
    getUsersControllers,
@@ -169,4 +183,5 @@ module.exports = {
    patchUsersControllers,
    deleteUsersControllers,
    patchUserPassword,
+   patchUserInfoControllers,
 };
