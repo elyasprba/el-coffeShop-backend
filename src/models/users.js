@@ -144,8 +144,6 @@ const updateNewPassword = async (id, body) => {
       }
       const sqlQuery = await db.query('UPDATE users SET password = coalesce($1, password), updated_at = $2 WHERE id = $3', [hashedNewPassword, updated_at, id]);
       if (!sqlQuery.rowCount) throw new ErrorHandler({ status: 404, message: 'Id Not Found' });
-      console.log(hashedNewPassword);
-      console.log(password);
       return {
          message: 'Update successful',
       };

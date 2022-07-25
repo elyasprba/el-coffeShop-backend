@@ -12,7 +12,7 @@ const cloudinaryStorage = new CloudinaryStorage({
 
 // menentukan ukuran
 const limit = {
-   fileSize: 2e6,
+   fileSize: 4e6,
 };
 
 //  menentukan ektensi file upload
