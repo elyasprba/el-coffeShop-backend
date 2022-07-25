@@ -13,16 +13,15 @@ const sendPasswordConfirmation = async (email, confirmCode) => {
             refreshToken: process.env.OAUTH_REFRESH_TOKEN,
          },
       });
-      let html = `<h2>el-CoffeeShop Forgot Password Confirmation</h2>
-      <h3>Hi, ${email}</h3>
-      <h3>Here is your account details:</h3>
+      let html = `<h4>el-CoffeeShop Forgot Password Confirmation</h4>
+      <h5>Hi, ${email}</h5>
+      <p>Here is your account details:</p>
       <ul>
-      <li>Email: <h3>${email}</h3></li>
+      <li>Email: <h6>${email}</h6></li>
       </ul>
-      </div>
-      YOUR RESET PASSWORD CONFIRMATION CODE: <h1>${confirmCode}</h1> <br>
-      INPUT THIS CODE WHEN RESET YOUR PASSWORD !
-      </div>`;
+      <p>
+      Your reset password confirmation code: <br> <h3>${confirmCode}</h3> <br> Input this code when reset your password!
+      </p`;
 
       let mailOptions = {
          from: process.env.MAIL_USERNAME,
