@@ -22,12 +22,12 @@ const { createTransactions, getSingleTransactions, updateTransactions, deleteTra
 
 const createTransactionsControllers = async (req, res) => {
    try {
-      // const { body } = req;
+      const { body } = req;
       const msg = {
          token: process.env.TOKEN_NOTIF,
          notification: {
-            body: 'Payment Successfull',
-            title: 'Succeess',
+            body: `User ${body.users_id} Created Transaction`,
+            title: 'TRANSACTION',
          },
       };
       const result = await createTransactions(req.body);
