@@ -1,22 +1,50 @@
 const transactionsModels = require('../models/transactions');
+const { messaging } = require('../config/firebase');
+const notif = messaging();
+const { createTransactions, getSingleTransactions, updateTransactions, deleteTransactions } = transactionsModels;
 
-const { createTransactions, getSingleTransactions, updateTransactions, deleteTransactions, sortProductsFavorite } = transactionsModels;
+// const createTransactionsControllers = (req, res) => {
+//    createTransactions(req.body)
+//       .then((data) => {
+//          res.status(200).json({
+//             err: null,
+//             data,
+//          });
+//       })
+//       .catch((err) => {
+//          console.log(err);
+//          res.status(500).json({
+//             err,
+//             data: [],
+//          });
+//       });
+// };
 
-const createTransactionsControllers = (req, res) => {
-   createTransactions(req.body)
-      .then((data) => {
-         res.status(200).json({
-            err: null,
-            data,
-         });
-      })
-      .catch((err) => {
-         console.log(err);
-         res.status(500).json({
-            err,
-            data: [],
-         });
+const createTransactionsControllers = async (req, res) => {
+   try {
+      // const { body } = req;
+      const msg = {
+         token: process.env.TOKEN_NOTIF,
+         notification: {
+            body: 'Payment Successfull',
+            title: 'Succeess',
+         },
+      };
+      const result = await createTransactions(req.body);
+      const { data } = result;
+      await notif.send(msg);
+      return res.status(200).json({
+         msg: 'Payment Successfull',
+         err: null,
+         data,
       });
+   } catch (error) {
+      const { status, err } = error;
+      res.status(status).json({
+         data: [],
+         err,
+      });
+   }
 };
 
 const getSingleTransactionsControllers = (req, res) => {

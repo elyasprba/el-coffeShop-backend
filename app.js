@@ -7,10 +7,12 @@ const cors = require('cors');
 const logger = require('morgan');
 const cloudConfig = require('./src/config/cloudinary');
 const { redisConn } = require('./src/config/redis');
+const firebase = require('./src/config/firebase');
+// const Messaging = messaging();
 
 const server = express();
 const PORT = process.env.PORT || 8080;
-
+// console.log(process.env.GOOGLE_APPLICATION_CREDENTIALS);
 // Redis
 redisConn();
 
