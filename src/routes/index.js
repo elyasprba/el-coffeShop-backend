@@ -13,17 +13,17 @@ Router.get('/', (req, res) => {
    });
 });
 
-Router.get('*', (req, res) => {
-   res.json({
-      message: 'Api Not Found',
-   });
-});
-
 Router.use('/users', usersRouter);
 Router.use('/products', productsRouter);
 Router.use('/transactions', transactionsRouter);
 Router.use('/promos', promosRouter);
 Router.use('/auth', authRouter);
 Router.use('/notif', notif);
+
+Router.get('*', (req, res) => {
+   res.json({
+      message: 'Api Not Found',
+   });
+});
 
 module.exports = Router;
