@@ -22,27 +22,26 @@ const { createTransactions, getSingleTransactions, updateTransactions, deleteTra
 
 const createTransactionsControllers = async (req, res) => {
    try {
-      // const { body } = req;
-      // const msg = {
-      //    token: process.env.TOKEN_NOTIF,
-      //    notification: {
-      //       body: `User ${body.users_id} Created Transaction`,
-      //       title: 'TRANSACTION',
-      //    },
-      // };
+      const { body } = req;
+      const msg = {
+         token: process.env.TOKEN_NOTIF,
+         notification: {
+            body: `User ${body.users_id} Created Transaction`,
+            title: 'TRANSACTION',
+         },
+      };
       const result = await createTransactions(req.body);
       const { data } = result;
-      // await notif.send(msg);
+      await notif.send(msg);
       return res.status(200).json({
          msg: 'Payment Successfull',
          err: null,
          data,
       });
-   } catch (error) {
-      const { status, err } = error;
-      res.status(status).json({
-         data: [],
+   } catch (err) {
+      res.status(500).json({
          err,
+         data: [],
       });
    }
 };
