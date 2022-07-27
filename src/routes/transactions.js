@@ -1,7 +1,7 @@
 const Router = require('express').Router();
 
 const transactionsControllers = require('../controllers/transactions');
-const { checkToken } = require('../middlewares/auth');
+const { checkToken, roleAdmin } = require('../middlewares/auth');
 
 Router.post('/', checkToken, transactionsControllers.createTransactionsControllers);
 Router.get('/', checkToken, transactionsControllers.getSingleTransactionsControllers);

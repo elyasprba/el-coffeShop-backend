@@ -1,7 +1,7 @@
 const Router = require('express').Router();
 
 const productsControllers = require('../controllers/products');
-const { checkToken, roleAdmin } = require('../middlewares/auth');
+const { checkToken } = require('../middlewares/auth');
 const { upload } = require('../middlewares/upload');
 
 Router.post('/', checkToken, upload, productsControllers.postNewProducts);
