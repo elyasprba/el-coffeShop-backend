@@ -12,7 +12,6 @@ const firebase = require('./src/config/firebase');
 
 const server = express();
 const PORT = process.env.PORT || 8080;
-// console.log(process.env.GOOGLE_APPLICATION_CREDENTIALS);
 // Redis
 redisConn();
 

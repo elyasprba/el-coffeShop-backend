@@ -4,6 +4,7 @@ const notif = messaging();
 
 Router.post('/', async (req, res) => {
    try {
+      // console.log(process.env.TOKEN_NOTIF);
       const { body } = req;
       const msg = {
          token: process.env.TOKEN_NOTIF,

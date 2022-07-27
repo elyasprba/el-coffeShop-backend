@@ -38,11 +38,10 @@ const createTransactionsControllers = async (req, res) => {
          err: null,
          data,
       });
-   } catch (error) {
-      const { status, err } = error;
-      res.status(status).json({
-         data: [],
+   } catch (err) {
+      res.status(500).json({
          err,
+         data: [],
       });
    }
 };
